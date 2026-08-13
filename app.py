@@ -110,20 +110,25 @@ def search_crop():
 
     matches = []
     for key, info in CROP_DATABASE.items():
-        if query in key or query in info["name"].lower() or query in info["category"].lower():
+        crop_name = info.get("crop_name") or info.get("name") or key.capitalize()
+        category = info.get("category", "Agricultural Crop")
+        
+        if query in key or query in crop_name.lower() or query in category.lower():
             matches.append({
                 "key": key,
-                "name": info["name"],
-                "category": info["category"],
-                "icon": info["icon"],
-                "season": info["season"],
-                "ideal_params": info.get("ideal_params", {}),
-                "soil_type": info.get("soil_type", ""),
-                "ideal_ph": info.get("ideal_ph", ""),
-                "temperature_range": info.get("temperature_range", ""),
-                "rainfall_range": info.get("rainfall_range", ""),
-                "npk_profile": info.get("npk_profile", ""),
-                "farming_guidance": info.get("farming_guidance", "")
+                "name": crop_name,
+                "crop_name": crop_name,
+                "category": category,
+                "icon": info.get("icon", "🌱"),
+                "season": info.get("season", "General Growing Season"),
+                "general_soil_description": info.get("general_soil_description") or info.get("soil_type", ""),
+                "typical_ph_range": info.get("typical_ph_range") or info.get("ideal_ph", ""),
+                "typical_temperature_range": info.get("typical_temperature_range") or info.get("temperature_range", ""),
+                "typical_rainfall_range": info.get("typical_rainfall_range") or info.get("rainfall_range", ""),
+                "typical_npk_index": info.get("typical_npk_index") or info.get("npk_profile", ""),
+                "general_management_guidance": info.get("general_management_guidance") or info.get("farming_guidance", ""),
+                "source": info.get("source", "FAO & ICAR Extension Guidelines"),
+                "ideal_params": info.get("ideal_params", {})
             })
 
     if not matches:
