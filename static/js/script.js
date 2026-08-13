@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="ideal-param-item">
                         <div class="ideal-param-label">Typical Humidity</div>
-                        <div class="ideal-param-value">${params.humidity ? params.humidity + ' %' : '-'}</div>
+                        <div class="ideal-param-value">${crop.typical_humidity_range || (params.humidity ? params.humidity + ' %' : '-')}</div>
                     </div>
                     <div class="ideal-param-item">
                         <div class="ideal-param-label">Typical Soil pH</div>

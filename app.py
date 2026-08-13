@@ -12,7 +12,7 @@ from flask import Flask, render_template, request, jsonify
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from src.prediction import CropPredictor
-from src.crop_info import CROP_DATABASE, get_crop_info, FEATURE_LIMITS
+from src.crop_info import CROP_DATABASE, get_crop_info, FEATURE_LIMITS, load_crop_information_db
 
 app = Flask(__name__)
 
@@ -108,8 +108,9 @@ def search_crop():
     if not query:
         return jsonify({"success": False, "error": "Search query parameter 'q' is required"}), 400
 
+    db = load_crop_information_db()
     matches = []
-    for key, info in CROP_DATABASE.items():
+    for key, info in db.items():
         crop_name = info.get("crop_name") or info.get("name") or key.capitalize()
         category = info.get("category", "Agricultural Crop")
         
@@ -124,6 +125,7 @@ def search_crop():
                 "general_soil_description": info.get("general_soil_description") or info.get("soil_type", ""),
                 "typical_ph_range": info.get("typical_ph_range") or info.get("ideal_ph", ""),
                 "typical_temperature_range": info.get("typical_temperature_range") or info.get("temperature_range", ""),
+                "typical_humidity_range": info.get("typical_humidity_range", ""),
                 "typical_rainfall_range": info.get("typical_rainfall_range") or info.get("rainfall_range", ""),
                 "typical_npk_index": info.get("typical_npk_index") or info.get("npk_profile", ""),
                 "general_management_guidance": info.get("general_management_guidance") or info.get("farming_guidance", ""),
