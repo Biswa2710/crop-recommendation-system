@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CropWise AI — Crop Recommendation System</title>
+    <title>CropWise.AI — Smart Agriculture Crop Recommendation System</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,13 +25,13 @@
             <ul class="nav-links">
                 <li><a href="#hero" class="nav-link active">Home</a></li>
                 <li><a href="#predictor" class="nav-link">Predictor</a></li>
+                <li><a href="#crop-explorer" class="nav-link">Crop Explorer</a></li>
                 <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
-                <li><a href="#crops" class="nav-link">Supported Crops</a></li>
                 <li><a href="#model-info" class="nav-link">ML Performance</a></li>
             </ul>
             <div class="nav-cta">
                 <a href="#predictor" class="btn btn-primary btn-sm">
-                    <i class="fa-solid fa-seedling"></i> Predict Crop
+                    <i class="fa-solid fa-seedling"></i> Analyze My Field
                 </a>
             </div>
             <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle navigation">
@@ -49,22 +49,54 @@
         <div class="container hero-container">
             <div class="hero-badge">
                 <span class="pulse-dot"></span>
-                <span>Next-Gen Agricultural Intelligence</span>
+                <span>AI Agriculture Platform</span>
             </div>
             <h1 class="hero-title">
-                Precision Crop Recommendations <br>
+                Intelligent Crop Recommendations <br>
                 Powered by <span class="gradient-text">Machine Learning</span>
             </h1>
             <p class="hero-subtitle">
-                Optimize farm yields and reduce soil degradation. Input your soil nutrient levels, weather, and rainfall parameters to receive AI-driven crop selection and expert farming guidance.
+                Analyze soil and environmental conditions to identify crops best suited for your field. Receive AI predictions, field condition health checks, and agronomic guidance.
             </p>
             <div class="hero-actions">
                 <a href="#predictor" class="btn btn-primary btn-lg">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i> Try Crop Predictor
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Analyze My Field
                 </a>
-                <a href="#how-it-works" class="btn btn-secondary btn-lg">
-                    <i class="fa-solid fa-circle-play"></i> Learn How It Works
+                <a href="#crop-explorer" class="btn btn-secondary btn-lg">
+                    <i class="fa-solid fa-compass"></i> Explore Crops
                 </a>
+            </div>
+
+            <!-- Verified Dashboard Statistics -->
+            <div class="hero-stats" id="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-wheat-awn"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value">22</span>
+                        <span class="stat-label">Supported Crops</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-database"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value">2,200+</span>
+                        <span class="stat-label">Training Samples</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-brain"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value">5</span>
+                        <span class="stat-label">ML Algorithms Evaluated</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value">99.55%</span>
+                        <span class="stat-label">Verified Test Accuracy</span>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -75,7 +107,7 @@
             <div class="section-header text-center">
                 <span class="sub-title">Smart Agriculture</span>
                 <h2>How AI Enhances Crop Selection</h2>
-                <p>Traditional crop selection often relies on trial and error. CropWise AI evaluates multi-dimensional soil chemistry and micro-climatic patterns instantly.</p>
+                <p>CropWise.AI evaluates multi-dimensional soil chemistry and micro-climatic patterns instantly to optimize farm yields.</p>
             </div>
             <div class="grid grid-3">
                 <div class="feature-box">
@@ -101,31 +133,9 @@
     <section class="predictor-section" id="predictor">
         <div class="container">
             <div class="section-header text-center">
-                <span class="sub-title">Interactive AI Tools</span>
-                <h2>Crop Predictor & Requirements Search</h2>
-                <p>Search any crop name to inspect its ideal soil & weather requirements, or fill in your field readings below to predict optimal crops.</p>
-            </div>
-
-            <!-- CROP SEARCH & EXPLORER CARD -->
-            <div class="card crop-search-card">
-                <div class="search-card-header">
-                    <h3><i class="fa-solid fa-magnifying-glass-chart text-emerald"></i> Search Crop Requirements & Soil Profiles</h3>
-                    <p>Type any crop name below (e.g. <em>Coffee, Rice, Mango, Cotton, Watermelon, Apple</em>) to view ideal growing conditions and auto-fill the predictor form!</p>
-                </div>
-                <div class="crop-search-form-row">
-                    <div class="search-input-wrapper">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" id="crop-search-input" placeholder="Type crop name (e.g. Coffee, Rice, Apple, Mango, Cotton)..." autocomplete="off">
-                        <button type="button" id="crop-search-btn" class="btn btn-primary btn-sm">
-                            <i class="fa-solid fa-search"></i> Search
-                        </button>
-                    </div>
-                </div>
-
-                <!-- SEARCH RESULT DISPLAY BOX -->
-                <div id="crop-search-result" class="crop-search-result hidden">
-                    <!-- Populated dynamically via JS -->
-                </div>
+                <span class="sub-title">Interactive AI Tool</span>
+                <h2>Field Analysis & Crop Predictor</h2>
+                <p>Input your soil test report and climate readings below or load a sample preset.</p>
             </div>
 
             <!-- Preset Samples Bar -->
@@ -241,8 +251,8 @@
 
                     <div class="form-actions text-center">
                         <button type="submit" id="submit-btn" class="btn btn-primary btn-xl">
-                            <span class="btn-text"><i class="fa-solid fa-sparkles"></i> Predict Optimal Crop</span>
-                            <span class="btn-loader hidden"><i class="fa-solid fa-circle-notch fa-spin"></i> Analyzing...</span>
+                            <span class="btn-text"><i class="fa-solid fa-sparkles"></i> Analyze Field</span>
+                            <span class="btn-loader hidden"><i class="fa-solid fa-circle-notch fa-spin"></i> Processing Field Data...</span>
                         </button>
                     </div>
                 </form>
@@ -252,7 +262,7 @@
             <div id="result-wrapper" class="result-wrapper {% if not result %}hidden{% endif %}">
                 <div class="card result-card">
                     <div class="result-header">
-                        <div class="badge badge-success"><i class="fa-solid fa-circle-check"></i> AI Recommendation Ready</div>
+                        <div class="badge badge-success"><i class="fa-solid fa-circle-check"></i> ML Recommendation Ready</div>
                         <span class="model-badge"><i class="fa-solid fa-brain"></i> Model: {{ result.model_used if result else 'Random Forest' }}</span>
                     </div>
 
@@ -267,12 +277,12 @@
                             </div>
                             {% if result and result.confidence %}
                             <div class="confidence-badge-box">
-                                <span class="conf-title">Model Confidence Score</span>
+                                <span class="conf-title">Model Proximity Score</span>
                                 <div class="conf-value">{{ result.confidence }}%</div>
                                 <div class="progress-bar">
                                     <div class="progress-fill" style="width: {{ result.confidence }}%;"></div>
                                 </div>
-                                <small class="conf-disclaimer">Statistical proximity score</small>
+                                <small class="conf-disclaimer">Statistical class probability</small>
                             </div>
                             {% endif %}
                         </div>
@@ -280,7 +290,7 @@
                         <!-- Alternative Crops Bar if available -->
                         {% if result and result.alternatives %}
                         <div class="alternatives-box">
-                            <h4><i class="fa-solid fa-list-ol"></i> Top Secondary Matches:</h4>
+                            <h4><i class="fa-solid fa-list-ol"></i> Other Suitable Crops (Top Probabilities):</h4>
                             <div class="alt-chips">
                                 {% for alt in result.alternatives %}
                                 <div class="alt-chip">
@@ -293,25 +303,49 @@
                         </div>
                         {% endif %}
 
-                        <!-- Inputs Summary Grid -->
-                        <div class="inputs-summary-box">
-                            <h4><i class="fa-solid fa-sliders"></i> Your Analyzed Input Parameters:</h4>
-                            <div class="summary-chips-grid">
-                                <div class="chip"><span>Nitrogen (N):</span> <strong>{{ result.inputs.N if result else '-' }} mg/kg</strong></div>
-                                <div class="chip"><span>Phosphorus (P):</span> <strong>{{ result.inputs.P if result else '-' }} mg/kg</strong></div>
-                                <div class="chip"><span>Potassium (K):</span> <strong>{{ result.inputs.K if result else '-' }} mg/kg</strong></div>
-                                <div class="chip"><span>Temperature:</span> <strong>{{ result.inputs.temperature if result else '-' }} °C</strong></div>
-                                <div class="chip"><span>Humidity:</span> <strong>{{ result.inputs.humidity if result else '-' }} %</strong></div>
-                                <div class="chip"><span>Soil pH:</span> <strong>{{ result.inputs.ph if result else '-' }} pH</strong></div>
-                                <div class="chip"><span>Rainfall:</span> <strong>{{ result.inputs.rainfall if result else '-' }} mm</strong></div>
+                        <!-- FIELD CONDITION HEALTH SUMMARY -->
+                        <div class="field-health-summary-box">
+                            <h4><i class="fa-solid fa-heart-pulse text-emerald"></i> Field Condition Summary (Relative to {{ result.crop_name if result else 'Recommended Crop' }}):</h4>
+                            <div class="health-status-grid" id="health-status-grid">
+                                {% if result and result.field_status %}
+                                {% for item in result.field_status %}
+                                <div class="health-status-card">
+                                    <div class="health-card-header">
+                                        <span class="h-feature">{{ item.feature }}</span>
+                                        <span class="badge {{ item.badge_class }}">{{ item.status }}</span>
+                                    </div>
+                                    <div class="h-value">{{ item.value }}</div>
+                                    <small class="h-ideal">Ideal: {{ item.ideal_range }}</small>
+                                </div>
+                                {% endfor %}
+                                {% endif %}
                             </div>
                         </div>
 
-                        <!-- AGRICULTURAL GUIDANCE BOX (Separated from ML Prediction) -->
+                        <!-- FERTILIZER & SOIL AMENDMENT GUIDANCE -->
+                        <div class="fertilizer-guidance-box">
+                            <h4><i class="fa-solid fa-vial-circle-check text-amber"></i> General Fertilizer & Soil Amendment Guidance:</h4>
+                            <div class="fertilizer-items" id="fertilizer-items">
+                                {% if result and result.fertilizer_guidance %}
+                                {% for fert in result.fertilizer_guidance %}
+                                <div class="fert-item">
+                                    <div class="fert-nutrient">
+                                        <i class="fa-solid fa-leaf"></i> <strong>{{ fert.nutrient }}</strong>
+                                        <span class="badge badge-info">{{ fert.status }}</span>
+                                    </div>
+                                    <p class="fert-advice">{{ fert.advice }}</p>
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                            <small class="agri-disclaimer">ℹ️ General agricultural information for educational support. Consult local agronomic extension experts before applying chemical fertilizers.</small>
+                        </div>
+
+                        <!-- AGRICULTURAL GUIDANCE BOX -->
                         <div class="agri-guidance-card">
                             <div class="agri-header">
-                                <h3><i class="fa-solid fa-wheat-awn-circle-exclamation"></i> Agricultural & Farming Guidance</h3>
-                                <span class="guidance-tag">Informational Field Knowledge</span>
+                                <h3><i class="fa-solid fa-wheat-awn-circle-exclamation"></i> Agronomic & Farming Guidance</h3>
+                                <span class="guidance-tag">Informational Knowledge</span>
                             </div>
                             <div class="agri-grid">
                                 <div class="agri-item">
@@ -340,54 +374,76 @@
         </div>
     </section>
 
+    <!-- CROP EXPLORER SECTION -->
+    <section class="crops-section" id="crop-explorer">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="sub-title">Interactive Database</span>
+                <h2>Crop Explorer & Requirements Search</h2>
+                <p>Search any crop to inspect its ideal soil chemistry, climate profile, and cultivation tips, or auto-fill the predictor form.</p>
+            </div>
+
+            <!-- CROP SEARCH & EXPLORER CARD -->
+            <div class="card crop-search-card">
+                <div class="search-card-header">
+                    <h3><i class="fa-solid fa-magnifying-glass-chart text-emerald"></i> Search Crop Soil Profiles</h3>
+                    <p>Type any crop name below (e.g. <em>Coffee, Rice, Mango, Cotton, Watermelon, Apple</em>) to view ideal growing conditions and auto-fill the predictor form!</p>
+                </div>
+                <div class="crop-search-form-row">
+                    <div class="search-input-wrapper">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="crop-search-input" placeholder="Type crop name (e.g. Coffee, Rice, Apple, Mango, Cotton)..." autocomplete="off">
+                        <button type="button" id="crop-search-btn" class="btn btn-primary btn-sm">
+                            <i class="fa-solid fa-search"></i> Search Crop
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SEARCH RESULT DISPLAY BOX -->
+                <div id="crop-search-result" class="crop-search-result hidden">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+
+            <!-- Supported Crops Grid Filter -->
+            <div class="crop-search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="crop-search" placeholder="Filter supported crops grid (e.g. Rice, Fruit, Pulse)...">
+            </div>
+
+            <div class="crops-grid" id="crops-grid">
+                <!-- Populated dynamically via JavaScript -->
+            </div>
+        </div>
+    </section>
+
     <!-- How It Works Section -->
     <section class="how-it-works" id="how-it-works">
         <div class="container">
             <div class="section-header text-center">
-                <span class="sub-title">Simple Pipeline</span>
-                <h2>How CropWise AI Operates</h2>
-                <p>A transparent, mathematically rigorous 3-step process.</p>
+                <span class="sub-title">ML Pipeline</span>
+                <h2>How CropWise.AI Operates</h2>
+                <p>A transparent, mathematically rigorous 3-step machine learning process.</p>
             </div>
             <div class="grid grid-3 steps-grid">
                 <div class="step-card">
                     <div class="step-number">01</div>
                     <div class="step-icon"><i class="fa-solid fa-clipboard-list"></i></div>
-                    <h3>Input Test Values</h3>
-                    <p>Enter Nitrogen, Phosphorus, Potassium, Temperature, Humidity, Soil pH, and Rainfall from field sensors or lab tests.</p>
+                    <h3>Field Measurement Input</h3>
+                    <p>Enter Nitrogen, Phosphorus, Potassium, Temperature, Humidity, Soil pH, and Rainfall parameters.</p>
                 </div>
                 <div class="step-card">
                     <div class="step-number">02</div>
                     <div class="step-icon"><i class="fa-solid fa-gears"></i></div>
                     <h3>Standardized ML Processing</h3>
-                    <p>Data passes through `StandardScaler` normalization and is evaluated by our Random Forest classifier trained on 2,200 agricultural records.</p>
+                    <p>Data passes through pre-fitted `StandardScaler` (fitted ONLY on training data) and is evaluated by Random Forest.</p>
                 </div>
                 <div class="step-card">
                     <div class="step-number">03</div>
                     <div class="step-icon"><i class="fa-solid fa-apple-whole"></i></div>
                     <h3>Crop & Agronomic Advice</h3>
-                    <p>Get instant crop identification, model confidence score, secondary alternatives, and detailed farming guidance.</p>
+                    <p>Get instant crop identification, probability score, field condition summary, fertilizer guidance, and farming tips.</p>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Supported Crops Section -->
-    <section class="crops-section" id="crops">
-        <div class="container">
-            <div class="section-header text-center">
-                <span class="sub-title">Database Overview</span>
-                <h2>22 Supported Crops</h2>
-                <p>Explore all agricultural crops recognized by our AI model.</p>
-            </div>
-
-            <!-- Crop Filter Search -->
-            <div class="crop-search-box">
-                <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="text" id="crop-search" placeholder="Search crops (e.g. Rice, Apple, Coffee, Cotton)...">
-            </div>
-
-            <div class="crops-grid" id="crops-grid">
-                <!-- Will be populated dynamically via JavaScript or pre-rendered -->
             </div>
         </div>
     </section>
@@ -398,19 +454,19 @@
             <div class="section-header text-center">
                 <span class="sub-title">Technical Credibility</span>
                 <h2>Machine Learning Model Performance</h2>
-                <p>Rigorous benchmark comparison across 5 candidate algorithms evaluated on test set.</p>
+                <p>Rigorous benchmark comparison across 5 candidate algorithms evaluated on a 20% stratified held-out test set (440 samples).</p>
             </div>
 
             <div class="grid grid-2">
                 <!-- Metrics Card -->
                 <div class="card model-summary-card">
-                    <h3>🏆 Selected Model: <span class="highlight-text" id="model-best-name">Random Forest</span></h3>
-                    <p>Evaluated using stratified 80/20 train-test split on 2,200 samples.</p>
+                    <h3>🏆 Best Model Selected: <span class="highlight-text" id="model-best-name">Random Forest Classifier</span></h3>
+                    <p>Evaluated using 80/20 train-test split on 2,200 samples across 22 classes.</p>
 
                     <div class="metrics-grid">
                         <div class="metric-box">
                             <span class="m-value" id="model-best-acc">99.55%</span>
-                            <span class="m-label">Test Accuracy</span>
+                            <span class="m-label">Verified Test Accuracy</span>
                         </div>
                         <div class="metric-box">
                             <span class="m-value" id="model-best-f1">99.55%</span>
@@ -418,13 +474,13 @@
                         </div>
                     </div>
 
-                    <h4>Comparison of Tested Algorithms:</h4>
+                    <h4>Candidate Algorithms Evaluation:</h4>
                     <div class="table-responsive">
                         <table class="model-table">
                             <thead>
                                 <tr>
                                     <th>Algorithm</th>
-                                    <th>Accuracy</th>
+                                    <th>Test Accuracy</th>
                                     <th>F1-Score</th>
                                 </tr>
                             </thead>
@@ -462,7 +518,7 @@
                 <!-- Confusion Matrix Card -->
                 <div class="card cm-card">
                     <h3><i class="fa-solid fa-chart-column"></i> Confusion Matrix Heatmap</h3>
-                    <p>Evaluated on 440 test samples across 22 classes.</p>
+                    <p>Evaluated on 440 test samples across 22 classes (20 test samples per class).</p>
                     <div class="cm-image-container">
                         <img src="{{ url_for('static', filename='images/confusion_matrix.png') }}" alt="Confusion Matrix" class="cm-img" onerror="this.src='/static/images/placeholder_cm.png'">
                     </div>
@@ -479,15 +535,15 @@
                     <span class="brand-icon">🌱</span>
                     <span class="brand-name">CropWise<span class="brand-accent">.AI</span></span>
                 </div>
-                <p>AI-Powered Crop Recommendation & Agricultural Intelligence System.</p>
+                <p>AI-Powered Smart Agriculture Crop Recommendation & Field Health Analysis Platform.</p>
             </div>
             <div class="footer-links">
                 <h4>Quick Navigation</h4>
                 <ul>
                     <li><a href="#hero">Home</a></li>
-                    <li><a href="#predictor">Crop Predictor</a></li>
+                    <li><a href="#predictor">Predictor</a></li>
+                    <li><a href="#crop-explorer">Crop Explorer</a></li>
                     <li><a href="#how-it-works">How It Works</a></li>
-                    <li><a href="#crops">Supported Crops</a></li>
                     <li><a href="#model-info">ML Model Specs</a></li>
                 </ul>
             </div>
@@ -504,7 +560,7 @@
             </div>
         </div>
         <div class="footer-bottom text-center">
-            <p>&copy; 2026 CropWise AI. Built for Smart Agricultural Management.</p>
+            <p>&copy; 2026 CropWise.AI. Built for Educational & Smart Agricultural Management. Not a replacement for professional in-field agronomic testing.</p>
         </div>
     </footer>
 

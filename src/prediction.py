@@ -9,7 +9,8 @@ import joblib
 import numpy as np
 import pandas as pd
 
-from src.crop_info import FEATURE_LIMITS, get_crop_info, CROP_DATABASE
+from src.crop_info import FEATURE_LIMITS, get_crop_info
+from src.data_validation import validate_input_bounds, analyze_field_health, load_crop_profiles
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODELS_DIR = os.path.join(PROJECT_ROOT, "models")
@@ -48,29 +49,8 @@ class CropPredictor:
                 
     @staticmethod
     def validate_inputs(input_data: dict) -> tuple[bool, str, dict]:
-        """
-        Validate input feature values against expected numerical bounds.
-        Returns (is_valid, error_message, cleaned_data_dict).
-        """
-        cleaned = {}
-        for feat, limits in FEATURE_LIMITS.items():
-            if feat not in input_data or input_data[feat] is None or str(input_data[feat]).strip() == "":
-                return False, f"Missing required field: {limits['label']}", {}
-                
-            try:
-                val = float(input_data[feat])
-            except (ValueError, TypeError):
-                return False, f"Invalid numerical value for {limits['label']}: '{input_data[feat]}'", {}
-                
-            # Range checks
-            if val < limits['min']:
-                return False, f"{limits['label']} ({val} {limits['unit']}) cannot be lower than {limits['min']} {limits['unit']}.", {}
-            if val > limits['max']:
-                return False, f"{limits['label']} ({val} {limits['unit']}) exceeds maximum realistic bound of {limits['max']} {limits['unit']}.", {}
-                
-            cleaned[feat] = val
-            
-        return True, "", cleaned
+        """Validate input feature values against physiological bounds."""
+        return validate_input_bounds(input_data)
 
     def predict(self, input_dict: dict) -> dict:
         """
@@ -92,7 +72,7 @@ class CropPredictor:
             'rainfall': cleaned_data['rainfall']
         }])
         
-        # Scale features using pre-fitted scaler
+        # Scale features using pre-fitted scaler (fitted ONLY on training data)
         scaled_vector = self.scaler.transform(feature_df)
         
         # Predict using model
@@ -130,25 +110,30 @@ class CropPredictor:
                     alternatives.append({
                         "crop_key": crop_name,
                         "crop_name": crop_details["name"],
-                        "icon": crop_details["icon"],
+                        "icon": crop_details.get("icon", "🌱"),
                         "confidence": round(float(prob_val) * 100, 1)
                     })
                     
         crop_info = get_crop_info(predicted_crop)
         
-        # Build recommendation explanation
+        # Build natural language explanation
         explanation = self._build_explanation(predicted_crop, cleaned_data, crop_info)
+        
+        # Analyze field health & fertilizer guidance relative to target crop
+        field_analysis = analyze_field_health(cleaned_data, predicted_crop)
         
         return {
             "success": True,
             "predicted_crop": predicted_crop,
             "crop_name": crop_info["name"],
-            "crop_icon": crop_info["icon"],
+            "crop_icon": crop_info.get("icon", "🌱"),
             "confidence": top_prob_pct,
             "inputs": cleaned_data,
             "explanation": explanation,
             "crop_info": crop_info,
             "alternatives": alternatives,
+            "field_status": field_analysis.get("field_status", []),
+            "fertilizer_guidance": field_analysis.get("fertilizer_guidance", []),
             "model_used": self.metadata.get("best_model_name", "Random Forest Classifier") if self.metadata else "Random Forest Classifier"
         }
         
@@ -161,7 +146,7 @@ class CropPredictor:
         if rain > 180:
             reasons.append(f"high annual rainfall of {rain:.1f} mm")
         elif rain < 60:
-            reasons.append(f"low water demand suitable for arid conditions ({rain:.1f} mm rainfall)")
+            reasons.append(f"low water requirement ({rain:.1f} mm rainfall)")
         else:
             reasons.append(f"moderate rainfall of {rain:.1f} mm")
             
@@ -178,4 +163,4 @@ class CropPredictor:
             reasons.append(f"rich potassium soil ({K:.0f} mg/kg)")
             
         reasons_str = ", ".join(reasons)
-        return f"{crop_info['name']} is uniquely suited for your field because of your field's {reasons_str}, and soil pH of {ph:.1f}."
+        return f"{crop_info['name']} is recommended because your field features a {reasons_str}, and soil pH of {ph:.1f}."

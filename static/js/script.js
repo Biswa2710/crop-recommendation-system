@@ -310,12 +310,33 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
 
-        // Agricultural Guidance Card
-        if (data.crop_info) {
-            document.getElementById('agri-soil').textContent = data.crop_info.soil_type || '-';
-            document.getElementById('agri-season').textContent = data.crop_info.season || '-';
-            document.getElementById('agri-npk').textContent = data.crop_info.npk_profile || '-';
-            document.getElementById('agri-tips').textContent = data.crop_info.farming_guidance || '-';
+        // Field Health Summary Grid
+        const healthGrid = document.getElementById('health-status-grid');
+        if (healthGrid && data.field_status && data.field_status.length > 0) {
+            healthGrid.innerHTML = data.field_status.map(item => `
+                <div class="health-status-card">
+                    <div class="health-card-header">
+                        <span class="h-feature">${item.feature}</span>
+                        <span class="badge ${item.badge_class}">${item.status}</span>
+                    </div>
+                    <div class="h-value">${item.value}</div>
+                    <small class="h-ideal">Ideal: ${item.ideal_range}</small>
+                </div>
+            `).join('');
+        }
+
+        // Fertilizer Guidance Box
+        const fertContainer = document.getElementById('fertilizer-items');
+        if (fertContainer && data.fertilizer_guidance && data.fertilizer_guidance.length > 0) {
+            fertContainer.innerHTML = data.fertilizer_guidance.map(f => `
+                <div class="fert-item">
+                    <div class="fert-nutrient">
+                        <i class="fa-solid fa-leaf text-emerald"></i> <strong>${f.nutrient}</strong>
+                        <span class="badge ${f.status === 'Optimal' ? 'badge-success' : (f.status === 'Low' ? 'badge-warning' : 'badge-info')}">${f.status}</span>
+                    </div>
+                    <p class="fert-advice">${f.advice}</p>
+                </div>
+            `).join('');
         }
 
         // Scroll smoothly to results

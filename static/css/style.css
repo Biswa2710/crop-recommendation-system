@@ -907,6 +907,122 @@ h1, h2, h3, h4 {
     font-weight: 700;
 }
 
+.badge-info { background: #e0f2fe; color: #0369a1; }
+.badge-warning { background: #fef3c7; color: #b45309; }
+
+/* Field Health Summary Box */
+.field-health-summary-box {
+    margin-bottom: 28px;
+    background: var(--white);
+    padding: 24px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--gray-200);
+}
+
+.field-health-summary-box h4 {
+    font-size: 1rem;
+    color: var(--dark-900);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.health-status-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.health-status-card {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    padding: 14px;
+    border-radius: var(--radius-sm);
+}
+
+.health-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.h-feature {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--dark-800);
+}
+
+.h-value {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--primary-700);
+    margin-bottom: 2px;
+}
+
+.h-ideal {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--gray-400);
+}
+
+/* Fertilizer Guidance Box */
+.fertilizer-guidance-box {
+    margin-bottom: 28px;
+    background: var(--white);
+    padding: 24px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--accent-amber);
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.08);
+}
+
+.fertilizer-guidance-box h4 {
+    font-size: 1rem;
+    color: var(--dark-900);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.fertilizer-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.fert-item {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    padding: 14px 18px;
+    border-radius: var(--radius-sm);
+}
+
+.fert-nutrient {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.92rem;
+    color: var(--dark-900);
+    margin-bottom: 6px;
+}
+
+.fert-advice {
+    font-size: 0.9rem;
+    color: var(--dark-600);
+    line-height: 1.5;
+}
+
+.agri-disclaimer {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--gray-400);
+    font-style: italic;
+}
+
 /* Summary Box */
 .inputs-summary-box {
     margin-bottom: 28px;

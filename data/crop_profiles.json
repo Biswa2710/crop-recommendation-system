@@ -1,0 +1,1014 @@
+{
+  "apple": {
+    "key": "apple",
+    "name": "Apple",
+    "category": "Fruit",
+    "icon": "\ud83c\udf4e",
+    "season": "Temperate Fruit",
+    "soil_type": "Well-drained, deep loamy soil rich in organic humus.",
+    "farming_guidance": "Temperate fruit requiring winter chilling hours for bud break. Ensure high potassium supply.",
+    "ranges": {
+      "N": {
+        "min": 0.0,
+        "max": 40.0,
+        "mean": 20.8
+      },
+      "P": {
+        "min": 120.0,
+        "max": 145.0,
+        "mean": 134.2
+      },
+      "K": {
+        "min": 195.0,
+        "max": 205.0,
+        "mean": 199.9
+      },
+      "temperature": {
+        "min": 21.0,
+        "max": 24.0,
+        "mean": 22.6
+      },
+      "humidity": {
+        "min": 90.0,
+        "max": 94.9,
+        "mean": 92.3
+      },
+      "ph": {
+        "min": 5.5,
+        "max": 6.5,
+        "mean": 5.9
+      },
+      "rainfall": {
+        "min": 100.1,
+        "max": 125.0,
+        "mean": 112.7
+      }
+    }
+  },
+  "banana": {
+    "key": "banana",
+    "name": "Banana",
+    "category": "Fruit",
+    "icon": "\ud83c\udf4c",
+    "season": "Perennial Fruit",
+    "soil_type": "Deep, rich loamy soil high in organic matter and good drainage.",
+    "farming_guidance": "Heavy feeder of nutrients. Provide high organic mulch, windbreaks, and frequent shallow irrigation.",
+    "ranges": {
+      "N": {
+        "min": 80.0,
+        "max": 120.0,
+        "mean": 100.2
+      },
+      "P": {
+        "min": 70.0,
+        "max": 95.0,
+        "mean": 82.0
+      },
+      "K": {
+        "min": 45.0,
+        "max": 55.0,
+        "mean": 50.0
+      },
+      "temperature": {
+        "min": 25.0,
+        "max": 29.9,
+        "mean": 27.4
+      },
+      "humidity": {
+        "min": 75.0,
+        "max": 85.0,
+        "mean": 80.4
+      },
+      "ph": {
+        "min": 5.5,
+        "max": 6.5,
+        "mean": 6.0
+      },
+      "rainfall": {
+        "min": 90.1,
+        "max": 119.8,
+        "mean": 104.6
+      }
+    }
+  },
+  "blackgram": {
+    "key": "blackgram",
+    "name": "Black Gram (Urad)",
+    "category": "Pulse / Legume",
+    "icon": "\ud83e\uded8",
+    "season": "Kharif & Summer",
+    "soil_type": "Heavy clay to loamy soil with neutral pH.",
+    "farming_guidance": "Prefers warm and humid climate. Sensitive to water stagnation; ensure elevated seed beds if rainfall is heavy.",
+    "ranges": {
+      "N": {
+        "min": 20.0,
+        "max": 60.0,
+        "mean": 40.0
+      },
+      "P": {
+        "min": 55.0,
+        "max": 80.0,
+        "mean": 67.5
+      },
+      "K": {
+        "min": 15.0,
+        "max": 25.0,
+        "mean": 19.2
+      },
+      "temperature": {
+        "min": 25.1,
+        "max": 34.9,
+        "mean": 30.0
+      },
+      "humidity": {
+        "min": 60.1,
+        "max": 70.0,
+        "mean": 65.1
+      },
+      "ph": {
+        "min": 6.5,
+        "max": 7.8,
+        "mean": 7.1
+      },
+      "rainfall": {
+        "min": 60.4,
+        "max": 74.9,
+        "mean": 67.9
+      }
+    }
+  },
+  "chickpea": {
+    "key": "chickpea",
+    "name": "Chickpea (Gram)",
+    "category": "Pulse / Legume",
+    "icon": "\ud83e\uddc6",
+    "season": "Rabi (Winter)",
+    "soil_type": "Deep loamy to clayey soil with good drainage.",
+    "farming_guidance": "Leguminous crop that fixes atmospheric nitrogen. Avoid excess irrigation to prevent root rot diseases.",
+    "ranges": {
+      "N": {
+        "min": 20.0,
+        "max": 60.0,
+        "mean": 40.1
+      },
+      "P": {
+        "min": 55.0,
+        "max": 80.0,
+        "mean": 67.8
+      },
+      "K": {
+        "min": 75.0,
+        "max": 85.0,
+        "mean": 79.9
+      },
+      "temperature": {
+        "min": 17.0,
+        "max": 21.0,
+        "mean": 18.9
+      },
+      "humidity": {
+        "min": 14.3,
+        "max": 20.0,
+        "mean": 16.9
+      },
+      "ph": {
+        "min": 6.0,
+        "max": 8.9,
+        "mean": 7.3
+      },
+      "rainfall": {
+        "min": 65.1,
+        "max": 94.8,
+        "mean": 80.1
+      }
+    }
+  },
+  "coconut": {
+    "key": "coconut",
+    "name": "Coconut",
+    "category": "Plantation Crop",
+    "icon": "\ud83e\udd65",
+    "season": "Perennial Plantation",
+    "soil_type": "Coastal alluvial, sandy, or laterite soil.",
+    "farming_guidance": "Requires high atmospheric humidity and abundant sunlight. Regular salt and potash fertilization improves nut size.",
+    "ranges": {
+      "N": {
+        "min": 0.0,
+        "max": 40.0,
+        "mean": 22.0
+      },
+      "P": {
+        "min": 5.0,
+        "max": 30.0,
+        "mean": 16.9
+      },
+      "K": {
+        "min": 25.0,
+        "max": 35.0,
+        "mean": 30.6
+      },
+      "temperature": {
+        "min": 25.0,
+        "max": 29.9,
+        "mean": 27.4
+      },
+      "humidity": {
+        "min": 90.0,
+        "max": 100.0,
+        "mean": 94.8
+      },
+      "ph": {
+        "min": 5.5,
+        "max": 6.5,
+        "mean": 6.0
+      },
+      "rainfall": {
+        "min": 131.1,
+        "max": 225.6,
+        "mean": 175.7
+      }
+    }
+  },
+  "coffee": {
+    "key": "coffee",
+    "name": "Coffee",
+    "category": "Commercial / Beverage",
+    "icon": "\u2615",
+    "season": "Perennial Plantation",
+    "soil_type": "Deep, porous friable loamy soil rich in humus.",
+    "farming_guidance": "Grown under partial shade of canopy trees on hill slopes. Pruning and weed control enhance berry yield.",
+    "ranges": {
+      "N": {
+        "min": 80.0,
+        "max": 120.0,
+        "mean": 101.2
+      },
+      "P": {
+        "min": 15.0,
+        "max": 40.0,
+        "mean": 28.7
+      },
+      "K": {
+        "min": 25.0,
+        "max": 35.0,
+        "mean": 29.9
+      },
+      "temperature": {
+        "min": 23.1,
+        "max": 27.9,
+        "mean": 25.5
+      },
+      "humidity": {
+        "min": 50.0,
+        "max": 69.9,
+        "mean": 58.9
+      },
+      "ph": {
+        "min": 6.0,
+        "max": 7.5,
+        "mean": 6.8
+      },
+      "rainfall": {
+        "min": 115.2,
+        "max": 199.5,
+        "mean": 158.1
+      }
+    }
+  },
+  "cotton": {
+    "key": "cotton",
+    "name": "Cotton",
+    "category": "Fiber Crop",
+    "icon": "\u2601\ufe0f",
+    "season": "Kharif (Monsoon)",
+    "soil_type": "Deep black cotton soil (Vertisols) or fertile alluvial soil.",
+    "farming_guidance": "Requires 180-200 frost-free days. Needs dry weather during boll opening and harvesting.",
+    "ranges": {
+      "N": {
+        "min": 100.0,
+        "max": 140.0,
+        "mean": 117.8
+      },
+      "P": {
+        "min": 35.0,
+        "max": 60.0,
+        "mean": 46.2
+      },
+      "K": {
+        "min": 15.0,
+        "max": 25.0,
+        "mean": 19.6
+      },
+      "temperature": {
+        "min": 22.0,
+        "max": 26.0,
+        "mean": 24.0
+      },
+      "humidity": {
+        "min": 75.0,
+        "max": 84.9,
+        "mean": 79.8
+      },
+      "ph": {
+        "min": 5.8,
+        "max": 8.0,
+        "mean": 6.9
+      },
+      "rainfall": {
+        "min": 60.7,
+        "max": 99.9,
+        "mean": 80.4
+      }
+    }
+  },
+  "grapes": {
+    "key": "grapes",
+    "name": "Grapes",
+    "category": "Fruit",
+    "icon": "\ud83c\udf47",
+    "season": "Perennial / Winter Pruning",
+    "soil_type": "Well-drained sandy loam or alluvial soil.",
+    "farming_guidance": "Requires high potassium for fruit sweetness. Needs trellising and careful pruning for ventilation.",
+    "ranges": {
+      "N": {
+        "min": 0.0,
+        "max": 40.0,
+        "mean": 23.2
+      },
+      "P": {
+        "min": 120.0,
+        "max": 145.0,
+        "mean": 132.5
+      },
+      "K": {
+        "min": 195.0,
+        "max": 205.0,
+        "mean": 200.1
+      },
+      "temperature": {
+        "min": 8.8,
+        "max": 41.9,
+        "mean": 23.8
+      },
+      "humidity": {
+        "min": 80.0,
+        "max": 84.0,
+        "mean": 81.9
+      },
+      "ph": {
+        "min": 5.5,
+        "max": 6.5,
+        "mean": 6.0
+      },
+      "rainfall": {
+        "min": 65.0,
+        "max": 74.9,
+        "mean": 69.6
+      }
+    }
+  },
+  "jute": {
+    "key": "jute",
+    "name": "Jute (Golden Fiber)",
+    "category": "Fiber Crop",
+    "icon": "\ud83c\udf8b",
+    "season": "Kharif (Monsoon)",
+    "soil_type": "New alluvial sandy loam soil.",
+    "farming_guidance": "Requires hot and humid climate with clean water body nearby for retting the fiber.",
+    "ranges": {
+      "N": {
+        "min": 60.0,
+        "max": 100.0,
+        "mean": 78.4
+      },
+      "P": {
+        "min": 35.0,
+        "max": 60.0,
+        "mean": 46.9
+      },
+      "K": {
+        "min": 35.0,
+        "max": 45.0,
+        "mean": 40.0
+      },
+      "temperature": {
+        "min": 23.1,
+        "max": 27.0,
+        "mean": 25.0
+      },
+      "humidity": {
+        "min": 70.9,
+        "max": 89.9,
+        "mean": 79.6
+      },
+      "ph": {
+        "min": 6.0,
+        "max": 7.5,
+        "mean": 6.7
+      },
+      "rainfall": {
+        "min": 150.2,
+        "max": 199.8,
+        "mean": 174.8
+      }
+    }
+  },
+  "kidneybeans": {
+    "key": "kidneybeans",
+    "name": "Kidney Beans (Rajma)",
+    "category": "Pulse / Legume",
+    "icon": "\ud83e\uded8",
+    "season": "Rabi (Winter)",
+    "soil_type": "Well-drained light loamy soil rich in organic content.",
+    "farming_guidance": "Requires cool weather for germination and pod development. Protect from severe frost.",
+    "ranges": {
+      "N": {
+        "min": 0.0,
+        "max": 40.0,
+        "mean": 20.8
+      },
+      "P": {
+        "min": 55.0,
+        "max": 80.0,
+        "mean": 67.5
+      },
+      "K": {
+        "min": 15.0,
+        "max": 25.0,
+        "mean": 20.1
+      },
+      "temperature": {
+        "min": 15.3,
+        "max": 24.9,
+        "mean": 20.1
+      },
+      "humidity": {
+        "min": 18.1,
+        "max": 25.0,
+        "mean": 21.6
+      },
+      "ph": {
+        "min": 5.5,
+        "max": 6.0,
+        "mean": 5.7
+      },
+      "rainfall": {
+        "min": 60.3,
+        "max": 149.7,
+        "mean": 105.9
+      }
+    }
+  },
+  "lentil": {
+    "key": "lentil",
+    "name": "Lentil (Masoor)",
+    "category": "Pulse / Legume",
+    "icon": "\ud83c\udf72",
+    "season": "Rabi (Winter)",
+    "soil_type": "Light loamy to clay soils with fair drainage.",
+    "farming_guidance": "Thrives under cool growing conditions. Requires light soil moisture during pod filling.",
+    "ranges": {
+      "N": {
+        "min": 0.0,
+        "max": 40.0,
+        "mean": 18.8
+      },
+      "P": {
+        "min": 55.0,
+        "max": 80.0,
+        "mean": 68.4
+      },
+      "K": {
+        "min": 15.0,
+        "max": 25.0,
+        "mean": 19.4
+      },
+      "temperature": {
+        "min": 18.1,
+        "max": 29.9,
+        "mean": 24.5
+      },
+      "humidity": {
+        "min": 60.1,
+        "max": 69.9,
+        "mean": 64.8
+      },
+      "ph": {
+        "min": 5.9,
+        "max": 7.8,
+        "mean": 6.9
+      },
+      "rainfall": {
+        "min": 35.0,
+        "max": 54.9,
+        "mean": 45.7
+      }
+    }
+  },
+  "maize": {
+    "key": "maize",
+    "name": "Maize (Corn)",
+    "category": "Cereal Grain",
+    "icon": "\ud83c\udf3d",
+    "season": "Kharif & Rabi",
+    "soil_type": "Deep, well-drained fertile loamy soil rich in organic matter.",
+    "farming_guidance": "Maize is sensitive to waterlogging. Maintain proper field drainage and apply nitrogen fertilizer in split doses.",
+    "ranges": {
+      "N": {
+        "min": 60.0,
+        "max": 100.0,
+        "mean": 77.8
+      },
+      "P": {
+        "min": 35.0,
+        "max": 60.0,
+        "mean": 48.4
+      },
+      "K": {
+        "min": 15.0,
+        "max": 25.0,
+        "mean": 19.8
+      },
+      "temperature": {
+        "min": 18.0,
+        "max": 26.5,
+        "mean": 22.4
+      },
+      "humidity": {
+        "min": 55.3,
+        "max": 74.8,
+        "mean": 65.1
+      },
+      "ph": {
+        "min": 5.5,
+        "max": 7.0,
+        "mean": 6.2
+      },
+      "rainfall": {
+        "min": 60.7,
+        "max": 109.8,
+        "mean": 84.8
+      }
+    }
+  },
+  "mango": {
+    "key": "mango",
+    "name": "Mango",
+    "category": "Fruit",
+    "icon": "\ud83e\udd6d",
+    "season": "Perennial Fruit",
+    "soil_type": "Deep alluvial to well-drained loamy soil.",
+    "farming_guidance": "Thrives in warm tropical climates. Requires dry spell during flowering phase for optimal fruit set.",
+    "ranges": {
+      "N": {
+        "min": 0.0,
+        "max": 40.0,
+        "mean": 20.1
+      },
+      "P": {
+        "min": 15.0,
+        "max": 40.0,
+        "mean": 27.2
+      },
+      "K": {
+        "min": 25.0,
+        "max": 35.0,
+        "mean": 29.9
+      },
+      "temperature": {
+        "min": 27.0,
+        "max": 36.0,
+        "mean": 31.2
+      },
+      "humidity": {
+        "min": 45.0,
+        "max": 55.0,
+        "mean": 50.2
+      },
+      "ph": {
+        "min": 4.5,
+        "max": 7.0,
+        "mean": 5.8
+      },
+      "rainfall": {
+        "min": 89.3,
+        "max": 100.8,
+        "mean": 94.7
+      }
+    }
+  },
+  "mothbeans": {
+    "key": "mothbeans",
+    "name": "Moth Beans",
+    "category": "Pulse / Legume",
+    "icon": "\ud83c\udf3f",
+    "season": "Kharif (Monsoon)",
+    "soil_type": "Sandy or light loamy well-drained soils.",
+    "farming_guidance": "Extremely drought-resistant crop suitable for arid and semi-arid regions. Requires very minimal water.",
+    "ranges": {
+      "N": {
+        "min": 0.0,
+        "max": 40.0,
+        "mean": 21.4
+      },
+      "P": {
+        "min": 35.0,
+        "max": 60.0,
+        "mean": 48.0
+      },
+      "K": {
+        "min": 15.0,
+        "max": 25.0,
+        "mean": 20.2
+      },
+      "temperature": {
+        "min": 24.0,
+        "max": 32.0,
+        "mean": 28.2
+      },
+      "humidity": {
+        "min": 40.0,
+        "max": 65.0,
+        "mean": 53.2
+      },
+      "ph": {
+        "min": 3.5,
+        "max": 9.9,
+        "mean": 6.8
+      },
+      "rainfall": {
+        "min": 30.9,
+        "max": 74.4,
+        "mean": 51.2
+      }
+    }
+  },
+  "mungbean": {
+    "key": "mungbean",
+    "name": "Mung Bean (Green Gram)",
+    "category": "Pulse / Legume",
+    "icon": "\ud83c\udf31",
+    "season": "Kharif & Summer",
+    "soil_type": "Well-drained loamy soil with good moisture retention.",
+    "farming_guidance": "Short-duration crop ideal for crop rotation. Enhances soil fertility by atmospheric nitrogen fixation.",
+    "ranges": {
+      "N": {
+        "min": 0.0,
+        "max": 40.0,
+        "mean": 21.0
+      },
+      "P": {
+        "min": 35.0,
+        "max": 60.0,
+        "mean": 47.3
+      },
+      "K": {
+        "min": 15.0,
+        "max": 25.0,
+        "mean": 19.9
+      },
+      "temperature": {
+        "min": 27.0,
+        "max": 29.9,
+        "mean": 28.5
+      },
+      "humidity": {
+        "min": 80.0,
+        "max": 90.0,
+        "mean": 85.5
+      },
+      "ph": {
+        "min": 6.2,
+        "max": 7.2,
+        "mean": 6.7
+      },
+      "rainfall": {
+        "min": 36.1,
+        "max": 59.9,
+        "mean": 48.4
+      }
+    }
+  },
+  "muskmelon": {
+    "key": "muskmelon",
+    "name": "Muskmelon",
+    "category": "Fruit",
+    "icon": "\ud83c\udf48",
+    "season": "Summer / Zaid",
+    "soil_type": "Well-drained sandy loam soil.",
+    "farming_guidance": "Prefers warm dry weather. Avoid overhead watering during fruit ripening to prevent fungal infection.",
+    "ranges": {
+      "N": {
+        "min": 80.0,
+        "max": 120.0,
+        "mean": 100.3
+      },
+      "P": {
+        "min": 5.0,
+        "max": 30.0,
+        "mean": 17.7
+      },
+      "K": {
+        "min": 45.0,
+        "max": 55.0,
+        "mean": 50.1
+      },
+      "temperature": {
+        "min": 27.0,
+        "max": 29.9,
+        "mean": 28.7
+      },
+      "humidity": {
+        "min": 90.0,
+        "max": 95.0,
+        "mean": 92.3
+      },
+      "ph": {
+        "min": 6.0,
+        "max": 6.8,
+        "mean": 6.4
+      },
+      "rainfall": {
+        "min": 20.2,
+        "max": 29.9,
+        "mean": 24.7
+      }
+    }
+  },
+  "orange": {
+    "key": "orange",
+    "name": "Orange (Citrus)",
+    "category": "Fruit",
+    "icon": "\ud83c\udf4a",
+    "season": "Sub-tropical / Winter",
+    "soil_type": "Deep well-drained sandy loam or clay loam soil.",
+    "farming_guidance": "Citrus crop sensitive to waterlogging. Apply micronutrients like Zinc and Boron for sweet juice quality.",
+    "ranges": {
+      "N": {
+        "min": 0.0,
+        "max": 40.0,
+        "mean": 19.6
+      },
+      "P": {
+        "min": 5.0,
+        "max": 30.0,
+        "mean": 16.6
+      },
+      "K": {
+        "min": 5.0,
+        "max": 15.0,
+        "mean": 10.0
+      },
+      "temperature": {
+        "min": 10.0,
+        "max": 34.9,
+        "mean": 22.8
+      },
+      "humidity": {
+        "min": 90.0,
+        "max": 95.0,
+        "mean": 92.2
+      },
+      "ph": {
+        "min": 6.0,
+        "max": 8.0,
+        "mean": 7.0
+      },
+      "rainfall": {
+        "min": 100.2,
+        "max": 119.7,
+        "mean": 110.5
+      }
+    }
+  },
+  "papaya": {
+    "key": "papaya",
+    "name": "Papaya",
+    "category": "Fruit",
+    "icon": "\ud83e\udd6d",
+    "season": "Year-round",
+    "soil_type": "Rich loamy soil with high organic matter and quick drainage.",
+    "farming_guidance": "Fast-growing fruit tree. Extremely sensitive to waterlogging which induces root rot within 48 hours.",
+    "ranges": {
+      "N": {
+        "min": 31.0,
+        "max": 70.0,
+        "mean": 49.9
+      },
+      "P": {
+        "min": 46.0,
+        "max": 70.0,
+        "mean": 59.0
+      },
+      "K": {
+        "min": 45.0,
+        "max": 55.0,
+        "mean": 50.0
+      },
+      "temperature": {
+        "min": 23.0,
+        "max": 43.7,
+        "mean": 33.7
+      },
+      "humidity": {
+        "min": 90.0,
+        "max": 94.9,
+        "mean": 92.4
+      },
+      "ph": {
+        "min": 6.5,
+        "max": 7.0,
+        "mean": 6.7
+      },
+      "rainfall": {
+        "min": 40.4,
+        "max": 248.9,
+        "mean": 142.6
+      }
+    }
+  },
+  "pigeonpeas": {
+    "key": "pigeonpeas",
+    "name": "Pigeon Peas (Arhar)",
+    "category": "Pulse / Legume",
+    "icon": "\ud83c\udf31",
+    "season": "Kharif (Monsoon)",
+    "soil_type": "Deep, well-drained alluvial or loam soil.",
+    "farming_guidance": "Highly drought-tolerant deep-rooted pulse. Great choice for intercropping with maize or sorghum.",
+    "ranges": {
+      "N": {
+        "min": 0.0,
+        "max": 40.0,
+        "mean": 20.7
+      },
+      "P": {
+        "min": 55.0,
+        "max": 80.0,
+        "mean": 67.7
+      },
+      "K": {
+        "min": 15.0,
+        "max": 25.0,
+        "mean": 20.3
+      },
+      "temperature": {
+        "min": 18.3,
+        "max": 37.0,
+        "mean": 27.7
+      },
+      "humidity": {
+        "min": 30.4,
+        "max": 69.7,
+        "mean": 48.1
+      },
+      "ph": {
+        "min": 4.5,
+        "max": 7.4,
+        "mean": 5.8
+      },
+      "rainfall": {
+        "min": 90.1,
+        "max": 198.8,
+        "mean": 149.5
+      }
+    }
+  },
+  "pomegranate": {
+    "key": "pomegranate",
+    "name": "Pomegranate",
+    "category": "Fruit",
+    "icon": "\ud83c\udf4e",
+    "season": "Perennial Fruit",
+    "soil_type": "Well-drained sandy loam to clay loam soil.",
+    "farming_guidance": "Requires semi-arid climate with hot dry summers. Pruning is essential for fruit quality.",
+    "ranges": {
+      "N": {
+        "min": 0.0,
+        "max": 40.0,
+        "mean": 18.9
+      },
+      "P": {
+        "min": 5.0,
+        "max": 30.0,
+        "mean": 18.8
+      },
+      "K": {
+        "min": 35.0,
+        "max": 45.0,
+        "mean": 40.2
+      },
+      "temperature": {
+        "min": 18.1,
+        "max": 25.0,
+        "mean": 21.8
+      },
+      "humidity": {
+        "min": 85.1,
+        "max": 95.0,
+        "mean": 90.1
+      },
+      "ph": {
+        "min": 5.6,
+        "max": 7.2,
+        "mean": 6.4
+      },
+      "rainfall": {
+        "min": 102.5,
+        "max": 112.5,
+        "mean": 107.5
+      }
+    }
+  },
+  "rice": {
+    "key": "rice",
+    "name": "Rice",
+    "category": "Cereal Grain",
+    "icon": "\ud83c\udf3e",
+    "season": "Kharif (Monsoon)",
+    "soil_type": "Clayey, loamy, or alluvial soil with high water retention capacity.",
+    "farming_guidance": "Requires flooded or waterlogged conditions during early growth phases. Ensure proper leveling of fields for uniform water depth.",
+    "ranges": {
+      "N": {
+        "min": 60.0,
+        "max": 99.0,
+        "mean": 79.9
+      },
+      "P": {
+        "min": 35.0,
+        "max": 60.0,
+        "mean": 47.6
+      },
+      "K": {
+        "min": 35.0,
+        "max": 45.0,
+        "mean": 39.9
+      },
+      "temperature": {
+        "min": 20.0,
+        "max": 26.9,
+        "mean": 23.7
+      },
+      "humidity": {
+        "min": 80.1,
+        "max": 85.0,
+        "mean": 82.3
+      },
+      "ph": {
+        "min": 5.0,
+        "max": 7.9,
+        "mean": 6.4
+      },
+      "rainfall": {
+        "min": 182.6,
+        "max": 298.6,
+        "mean": 236.2
+      }
+    }
+  },
+  "watermelon": {
+    "key": "watermelon",
+    "name": "Watermelon",
+    "category": "Fruit",
+    "icon": "\ud83c\udf49",
+    "season": "Summer / Zaid",
+    "soil_type": "Sandy loam soil rich in organic content with excellent drainage.",
+    "farming_guidance": "Requires warm sunshine and low relative humidity during fruit maturation to maximize sugar content.",
+    "ranges": {
+      "N": {
+        "min": 80.0,
+        "max": 120.0,
+        "mean": 99.4
+      },
+      "P": {
+        "min": 5.0,
+        "max": 30.0,
+        "mean": 17.0
+      },
+      "K": {
+        "min": 45.0,
+        "max": 55.0,
+        "mean": 50.2
+      },
+      "temperature": {
+        "min": 24.0,
+        "max": 27.0,
+        "mean": 25.6
+      },
+      "humidity": {
+        "min": 80.0,
+        "max": 90.0,
+        "mean": 85.2
+      },
+      "ph": {
+        "min": 6.0,
+        "max": 7.0,
+        "mean": 6.5
+      },
+      "rainfall": {
+        "min": 40.1,
+        "max": 59.8,
+        "mean": 50.8
+      }
+    }
+  }
+}
