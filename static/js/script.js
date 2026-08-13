@@ -85,42 +85,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 <div class="search-ideal-grid">
                     <div class="ideal-param-item">
-                        <div class="ideal-param-label">Ideal Nitrogen (N)</div>
-                        <div class="ideal-param-value">${params.N || '-'} mg/kg</div>
+                        <div class="ideal-param-label">Sample N Index</div>
+                        <div class="ideal-param-value">${params.N || '-'}</div>
                     </div>
                     <div class="ideal-param-item">
-                        <div class="ideal-param-label">Ideal Phosphorus (P)</div>
-                        <div class="ideal-param-value">${params.P || '-'} mg/kg</div>
+                        <div class="ideal-param-label">Sample P Index</div>
+                        <div class="ideal-param-value">${params.P || '-'}</div>
                     </div>
                     <div class="ideal-param-item">
-                        <div class="ideal-param-label">Ideal Potassium (K)</div>
-                        <div class="ideal-param-value">${params.K || '-'} mg/kg</div>
+                        <div class="ideal-param-label">Sample K Index</div>
+                        <div class="ideal-param-value">${params.K || '-'}</div>
                     </div>
                     <div class="ideal-param-item">
-                        <div class="ideal-param-label">Ideal Temperature</div>
-                        <div class="ideal-param-value">${params.temperature || '-'} °C</div>
+                        <div class="ideal-param-label">Typical Temp</div>
+                        <div class="ideal-param-value">${crop.typical_temperature_range || (params.temperature ? params.temperature + ' °C' : '-')}</div>
                     </div>
                     <div class="ideal-param-item">
-                        <div class="ideal-param-label">Ideal Humidity</div>
-                        <div class="ideal-param-value">${params.humidity || '-'} %</div>
+                        <div class="ideal-param-label">Typical Humidity</div>
+                        <div class="ideal-param-value">${params.humidity ? params.humidity + ' %' : '-'}</div>
                     </div>
                     <div class="ideal-param-item">
-                        <div class="ideal-param-label">Ideal Soil pH</div>
-                        <div class="ideal-param-value">${params.ph || '-'} pH</div>
+                        <div class="ideal-param-label">Typical Soil pH</div>
+                        <div class="ideal-param-value">${crop.typical_ph_range || (params.ph ? params.ph + ' pH' : '-')}</div>
                     </div>
                     <div class="ideal-param-item">
-                        <div class="ideal-param-label">Ideal Rainfall</div>
-                        <div class="ideal-param-value">${params.rainfall || '-'} mm</div>
+                        <div class="ideal-param-label">Typical Rainfall</div>
+                        <div class="ideal-param-value">${crop.typical_rainfall_range || (params.rainfall ? params.rainfall + ' mm' : '-')}</div>
                     </div>
                     <div class="ideal-param-item">
-                        <div class="ideal-param-label">Soil Type</div>
-                        <div class="ideal-param-value" style="font-size:0.85rem; font-family:inherit;">${crop.soil_type || 'Fertile Soil'}</div>
+                        <div class="ideal-param-label">Soil Profile</div>
+                        <div class="ideal-param-value" style="font-size:0.85rem; font-family:inherit;">${crop.general_soil_description || crop.soil_type || 'Fertile Soil'}</div>
                     </div>
                 </div>
 
                 <div class="agri-item" style="background: var(--gray-50); padding:14px; border-radius:8px;">
-                    <div class="agri-item-title"><i class="fa-solid fa-lightbulb text-amber"></i> Cultivation Tip for ${crop.name}</div>
-                    <p style="font-size:0.9rem; color:var(--dark-600);">${crop.farming_guidance}</p>
+                    <div class="agri-item-title"><i class="fa-solid fa-lightbulb text-amber"></i> Cultivation Tip for ${crop.crop_name || crop.name}</div>
+                    <p style="font-size:0.9rem; color:var(--dark-600);">${crop.general_management_guidance || crop.farming_guidance}</p>
+                    <small style="display:block; margin-top:8px; color:var(--gray-400);"><i class="fa-solid fa-book-bookmark"></i> Source: ${crop.source || 'FAO & ICAR Extension Guidelines'}</small>
                 </div>
             `;
 
@@ -342,13 +343,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // Agronomic & Farming Guidance Card
         if (data.crop_info) {
             const soilEl = document.getElementById('agri-soil');
+            const phRangeEl = document.getElementById('agri-ph-range');
             const seasonEl = document.getElementById('agri-season');
-            const npkEl = document.getElementById('agri-npk');
             const tipsEl = document.getElementById('agri-tips');
-            if (soilEl) soilEl.textContent = data.crop_info.soil_type || '-';
+            const sourceEl = document.getElementById('agri-source');
+
+            if (soilEl) soilEl.textContent = data.crop_info.general_soil_description || data.crop_info.soil_type || '-';
+            if (phRangeEl) phRangeEl.textContent = data.crop_info.typical_ph_range || data.crop_info.ideal_ph || '-';
             if (seasonEl) seasonEl.textContent = data.crop_info.season || '-';
-            if (npkEl) npkEl.textContent = data.crop_info.npk_profile || '-';
-            if (tipsEl) tipsEl.textContent = data.crop_info.farming_guidance || '-';
+            if (tipsEl) tipsEl.textContent = data.crop_info.general_management_guidance || data.crop_info.farming_guidance || '-';
+            if (sourceEl) sourceEl.textContent = data.crop_info.source || 'FAO & ICAR Extension Guidelines';
         }
 
         // Scroll smoothly to results

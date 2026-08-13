@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 
 from src.crop_info import FEATURE_LIMITS, get_crop_info
-from src.data_validation import validate_input_bounds, analyze_field_health, load_crop_profiles
+from src.data_validation import validate_input_bounds, analyze_field_health
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODELS_DIR = os.path.join(PROJECT_ROOT, "models")
@@ -44,7 +44,7 @@ class CropPredictor:
             self.label_encoder = joblib.load(le_path)
             
         if os.path.exists(meta_path):
-            with open(meta_path, 'r') as f:
+            with open(meta_path, 'r', encoding='utf-8') as f:
                 self.metadata = json.load(f)
                 
     @staticmethod
@@ -72,7 +72,7 @@ class CropPredictor:
             'rainfall': cleaned_data['rainfall']
         }])
         
-        # Scale features using pre-fitted scaler (fitted ONLY on training data)
+        # Scale features using pre-fitted scaler (fitted ONLY on training data to prevent data leakage)
         scaled_vector = self.scaler.transform(feature_df)
         
         # Predict using model
@@ -84,7 +84,7 @@ class CropPredictor:
         else:
             predicted_crop = str(raw_pred)
             
-        # Calculate probabilities if supported
+        # Calculate probabilities using model's predict_proba()
         top_prob_pct = None
         alternatives = []
         
@@ -100,32 +100,33 @@ class CropPredictor:
             # Pair classes with probabilities
             prob_pairs = sorted(zip(class_names, probs), key=lambda x: x[1], reverse=True)
             
-            # Top crop probability
+            # Top crop estimated probability score
             top_prob_pct = round(float(prob_pairs[0][1]) * 100, 1)
             
-            # Alternative predictions (top 2nd and 3rd)
+            # Alternative candidate crop predictions (top 2nd and 3rd)
             for crop_name, prob_val in prob_pairs[1:4]:
                 if prob_val > 0.01:
                     crop_details = get_crop_info(crop_name)
                     alternatives.append({
                         "crop_key": crop_name,
-                        "crop_name": crop_details["name"],
+                        "crop_name": crop_details.get("crop_name", crop_name.capitalize()),
                         "icon": crop_details.get("icon", "🌱"),
                         "confidence": round(float(prob_val) * 100, 1)
                     })
                     
         crop_info = get_crop_info(predicted_crop)
         
-        # Build natural language explanation
-        explanation = self._build_explanation(predicted_crop, cleaned_data, crop_info)
+        # Clear scientific explanation
+        model_name = self.metadata.get("best_model_name", "Random Forest Classifier") if self.metadata else "Random Forest Classifier"
+        explanation = f"The {model_name} model identified {crop_info.get('crop_name', predicted_crop.capitalize())} as the target class with the highest predicted score based on the 7 supplied input feature values."
         
-        # Analyze field health & fertilizer guidance relative to target crop
+        # Analyze field health & fertilizer guidance
         field_analysis = analyze_field_health(cleaned_data, predicted_crop)
         
         return {
             "success": True,
             "predicted_crop": predicted_crop,
-            "crop_name": crop_info["name"],
+            "crop_name": crop_info.get("crop_name", predicted_crop.capitalize()),
             "crop_icon": crop_info.get("icon", "🌱"),
             "confidence": top_prob_pct,
             "inputs": cleaned_data,
@@ -134,33 +135,5 @@ class CropPredictor:
             "alternatives": alternatives,
             "field_status": field_analysis.get("field_status", []),
             "fertilizer_guidance": field_analysis.get("fertilizer_guidance", []),
-            "model_used": self.metadata.get("best_model_name", "Random Forest Classifier") if self.metadata else "Random Forest Classifier"
+            "model_used": model_name
         }
-        
-    def _build_explanation(self, crop: str, inputs: dict, crop_info: dict) -> str:
-        """Construct natural language explanation of why this crop fits the parameters."""
-        N, P, K = inputs['N'], inputs['P'], inputs['K']
-        temp, hum, ph, rain = inputs['temperature'], inputs['humidity'], inputs['ph'], inputs['rainfall']
-        
-        reasons = []
-        if rain > 180:
-            reasons.append(f"high annual rainfall of {rain:.1f} mm")
-        elif rain < 60:
-            reasons.append(f"low water requirement ({rain:.1f} mm rainfall)")
-        else:
-            reasons.append(f"moderate rainfall of {rain:.1f} mm")
-            
-        if temp > 30:
-            reasons.append(f"warm temperature of {temp:.1f}°C")
-        elif temp < 20:
-            reasons.append(f"cool climate of {temp:.1f}°C")
-        else:
-            reasons.append(f"optimal temperature of {temp:.1f}°C")
-            
-        if N > 80:
-            reasons.append(f"high soil nitrogen content ({N:.0f} mg/kg)")
-        if K > 100:
-            reasons.append(f"rich potassium soil ({K:.0f} mg/kg)")
-            
-        reasons_str = ", ".join(reasons)
-        return f"{crop_info['name']} is recommended because your field features a {reasons_str}, and soil pH of {ph:.1f}."
