@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CropWise AI — Crop Recommendation System</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Sticky Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-brand">
+                <span class="brand-icon">🌱</span>
+                <span class="brand-name">CropWise<span class="brand-accent">.AI</span></span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#hero" class="nav-link active">Home</a></li>
+                <li><a href="#predictor" class="nav-link">Predictor</a></li>
+                <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+                <li><a href="#crops" class="nav-link">Supported Crops</a></li>
+                <li><a href="#model-info" class="nav-link">ML Performance</a></li>
+            </ul>
+            <div class="nav-cta">
+                <a href="#predictor" class="btn btn-primary btn-sm">
+                    <i class="fa-solid fa-seedling"></i> Predict Crop
+                </a>
+            </div>
+            <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle navigation">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+        </div>
+        <div class="container hero-container">
+            <div class="hero-badge">
+                <span class="pulse-dot"></span>
+                <span>Next-Gen Agricultural Intelligence</span>
+            </div>
+            <h1 class="hero-title">
+                Precision Crop Recommendations <br>
+                Powered by <span class="gradient-text">Machine Learning</span>
+            </h1>
+            <p class="hero-subtitle">
+                Optimize farm yields and reduce soil degradation. Input your soil nutrient levels, weather, and rainfall parameters to receive AI-driven crop selection and expert farming guidance.
+            </p>
+            <div class="hero-actions">
+                <a href="#predictor" class="btn btn-primary btn-lg">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Try Crop Predictor
+                </a>
+                <a href="#how-it-works" class="btn btn-secondary btn-lg">
+                    <i class="fa-solid fa-circle-play"></i> Learn How It Works
+                </a>
+            </div>
+            
+            <!-- Quick Stats Bar -->
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-wheat-awn"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value">22</span>
+                        <span class="stat-label">Crops Supported</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-flask"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value">7</span>
+                        <span class="stat-label">Soil & Weather Factors</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-chart-line"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value">99.55%</span>
+                        <span class="stat-label">Model Accuracy</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value">Instant</span>
+                        <span class="stat-label">Real-Time Prediction</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Explanation Section -->
+    <section class="explanation-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="sub-title">Smart Agriculture</span>
+                <h2>How AI Enhances Crop Selection</h2>
+                <p>Traditional crop selection often relies on trial and error. CropWise AI evaluates multi-dimensional soil chemistry and micro-climatic patterns instantly.</p>
+            </div>
+            <div class="grid grid-3">
+                <div class="feature-box">
+                    <div class="feature-icon icon-emerald"><i class="fa-solid fa-vial"></i></div>
+                    <h3>Soil Nutrients (N-P-K)</h3>
+                    <p>Nitrogen, Phosphorus, and Potassium balance determines vegetation growth, root stability, and crop metabolic synthesis.</p>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon icon-teal"><i class="fa-solid fa-cloud-sun-rain"></i></div>
+                    <h3>Climate Profile</h3>
+                    <p>Temperature and relative humidity levels govern transpiration, pollination windows, and thermal stress thresholds.</p>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon icon-amber"><i class="fa-solid fa-droplet"></i></div>
+                    <h3>Soil pH & Rainfall</h3>
+                    <p>Soil pH regulates nutrient availability to root systems, while seasonal rainfall determines irrigation sustainability.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Predictor Section -->
+    <section class="predictor-section" id="predictor">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="sub-title">Interactive AI Tools</span>
+                <h2>Crop Predictor & Requirements Search</h2>
+                <p>Search any crop name to inspect its ideal soil & weather requirements, or fill in your field readings below to predict optimal crops.</p>
+            </div>
+
+            <!-- CROP SEARCH & EXPLORER CARD -->
+            <div class="card crop-search-card">
+                <div class="search-card-header">
+                    <h3><i class="fa-solid fa-magnifying-glass-chart text-emerald"></i> Search Crop Requirements & Soil Profiles</h3>
+                    <p>Type any crop name below (e.g. <em>Coffee, Rice, Mango, Cotton, Watermelon, Apple</em>) to view ideal growing conditions and auto-fill the predictor form!</p>
+                </div>
+                <div class="crop-search-form-row">
+                    <div class="search-input-wrapper">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="crop-search-input" placeholder="Type crop name (e.g. Coffee, Rice, Apple, Mango, Cotton)..." autocomplete="off">
+                        <button type="button" id="crop-search-btn" class="btn btn-primary btn-sm">
+                            <i class="fa-solid fa-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SEARCH RESULT DISPLAY BOX -->
+                <div id="crop-search-result" class="crop-search-result hidden">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+
+            <!-- Preset Samples Bar -->
+            <div class="presets-wrapper">
+                <span class="presets-title"><i class="fa-solid fa-lightbulb"></i> Load Sample Preset:</span>
+                <div class="preset-buttons">
+                    <button class="preset-btn" data-preset="rice">🌾 Rice</button>
+                    <button class="preset-btn" data-preset="maize">🌽 Maize</button>
+                    <button class="preset-btn" data-preset="cotton">☁️ Cotton</button>
+                    <button class="preset-btn" data-preset="coffee">☕ Coffee</button>
+                    <button class="preset-btn" data-preset="apple">🍎 Apple</button>
+                    <button class="preset-btn" data-preset="watermelon">🍉 Watermelon</button>
+                </div>
+            </div>
+
+            <!-- Main Form Card -->
+            <div class="card form-card">
+                <div id="alert-box" class="alert-box hidden"></div>
+
+                <form id="prediction-form" action="/predict" method="POST">
+                    <div class="form-grid">
+                        <!-- Nitrogen -->
+                        <div class="input-group">
+                            <label for="N">
+                                <i class="fa-solid fa-leaf text-emerald"></i> Nitrogen (N)
+                                <span class="tooltip-icon" title="Nitrogen content in soil (mg/kg). Range: 0 to 140"><i class="fa-solid fa-circle-info"></i></span>
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="number" id="N" name="N" min="0" max="140" step="1" placeholder="e.g. 90" required>
+                                <span class="input-unit">mg/kg</span>
+                            </div>
+                            <small class="input-hint">Allowed: 0 – 140 mg/kg</small>
+                        </div>
+
+                        <!-- Phosphorus -->
+                        <div class="input-group">
+                            <label for="P">
+                                <i class="fa-solid fa-seedling text-emerald"></i> Phosphorus (P)
+                                <span class="tooltip-icon" title="Phosphorus content in soil (mg/kg). Range: 5 to 145"><i class="fa-solid fa-circle-info"></i></span>
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="number" id="P" name="P" min="5" max="145" step="1" placeholder="e.g. 42" required>
+                                <span class="input-unit">mg/kg</span>
+                            </div>
+                            <small class="input-hint">Allowed: 5 – 145 mg/kg</small>
+                        </div>
+
+                        <!-- Potassium -->
+                        <div class="input-group">
+                            <label for="K">
+                                <i class="fa-solid fa-tree text-emerald"></i> Potassium (K)
+                                <span class="tooltip-icon" title="Potassium content in soil (mg/kg). Range: 5 to 205"><i class="fa-solid fa-circle-info"></i></span>
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="number" id="K" name="K" min="5" max="205" step="1" placeholder="e.g. 43" required>
+                                <span class="input-unit">mg/kg</span>
+                            </div>
+                            <small class="input-hint">Allowed: 5 – 205 mg/kg</small>
+                        </div>
+
+                        <!-- Temperature -->
+                        <div class="input-group">
+                            <label for="temperature">
+                                <i class="fa-solid fa-temperature-three-quarters text-amber"></i> Temperature
+                                <span class="tooltip-icon" title="Average temperature in °C. Range: 8.0 to 45.0 °C"><i class="fa-solid fa-circle-info"></i></span>
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="number" id="temperature" name="temperature" min="8.0" max="45.0" step="0.1" placeholder="e.g. 23.5" required>
+                                <span class="input-unit">°C</span>
+                            </div>
+                            <small class="input-hint">Allowed: 8.0 – 45.0 °C</small>
+                        </div>
+
+                        <!-- Humidity -->
+                        <div class="input-group">
+                            <label for="humidity">
+                                <i class="fa-solid fa-droplet text-teal"></i> Humidity
+                                <span class="tooltip-icon" title="Relative humidity in %. Range: 14.0 to 100.0 %"><i class="fa-solid fa-circle-info"></i></span>
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="number" id="humidity" name="humidity" min="14.0" max="100.0" step="0.1" placeholder="e.g. 82.0" required>
+                                <span class="input-unit">%</span>
+                            </div>
+                            <small class="input-hint">Allowed: 14.0 – 100.0 %</small>
+                        </div>
+
+                        <!-- Soil pH -->
+                        <div class="input-group">
+                            <label for="ph">
+                                <i class="fa-solid fa-flask-vial text-emerald"></i> Soil pH
+                                <span class="tooltip-icon" title="Soil pH level. Range: 3.5 to 10.0"><i class="fa-solid fa-circle-info"></i></span>
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="number" id="ph" name="ph" min="3.5" max="10.0" step="0.1" placeholder="e.g. 6.5" required>
+                                <span class="input-unit">pH</span>
+                            </div>
+                            <small class="input-hint">Allowed: 3.5 – 10.0 pH</small>
+                        </div>
+
+                        <!-- Rainfall -->
+                        <div class="input-group full-width-sm">
+                            <label for="rainfall">
+                                <i class="fa-solid fa-cloud-showers-heavy text-teal"></i> Rainfall
+                                <span class="tooltip-icon" title="Seasonal rainfall in mm. Range: 20.0 to 350.0 mm"><i class="fa-solid fa-circle-info"></i></span>
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="number" id="rainfall" name="rainfall" min="20.0" max="350.0" step="0.1" placeholder="e.g. 202.9" required>
+                                <span class="input-unit">mm</span>
+                            </div>
+                            <small class="input-hint">Allowed: 20.0 – 350.0 mm</small>
+                        </div>
+                    </div>
+
+                    <div class="form-actions text-center">
+                        <button type="submit" id="submit-btn" class="btn btn-primary btn-xl">
+                            <span class="btn-text"><i class="fa-solid fa-sparkles"></i> Predict Optimal Crop</span>
+                            <span class="btn-loader hidden"><i class="fa-solid fa-circle-notch fa-spin"></i> Analyzing...</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- RESULT CARD SECTION -->
+            <div id="result-wrapper" class="result-wrapper {% if not result %}hidden{% endif %}">
+                <div class="card result-card">
+                    <div class="result-header">
+                        <div class="badge badge-success"><i class="fa-solid fa-circle-check"></i> AI Recommendation Ready</div>
+                        <span class="model-badge"><i class="fa-solid fa-brain"></i> Model: {{ result.model_used if result else 'Random Forest' }}</span>
+                    </div>
+
+                    <div class="result-body">
+                        <!-- Main Crop Banner -->
+                        <div class="crop-hero-banner">
+                            <div class="crop-icon-large">{{ result.crop_icon if result else '🌾' }}</div>
+                            <div class="crop-hero-details">
+                                <span class="hero-label">Recommended Crop</span>
+                                <h2 class="crop-hero-name" id="res-crop-name">{{ result.crop_name if result else 'Rice' }}</h2>
+                                <p class="crop-explanation" id="res-explanation">{{ result.explanation if result else '' }}</p>
+                            </div>
+                            {% if result and result.confidence %}
+                            <div class="confidence-badge-box">
+                                <span class="conf-title">Model Confidence Score</span>
+                                <div class="conf-value">{{ result.confidence }}%</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: {{ result.confidence }}%;"></div>
+                                </div>
+                                <small class="conf-disclaimer">Statistical proximity score</small>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Alternative Crops Bar if available -->
+                        {% if result and result.alternatives %}
+                        <div class="alternatives-box">
+                            <h4><i class="fa-solid fa-list-ol"></i> Top Secondary Matches:</h4>
+                            <div class="alt-chips">
+                                {% for alt in result.alternatives %}
+                                <div class="alt-chip">
+                                    <span class="alt-icon">{{ alt.icon }}</span>
+                                    <span class="alt-name">{{ alt.crop_name }}</span>
+                                    <span class="alt-conf">{{ alt.confidence }}%</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Inputs Summary Grid -->
+                        <div class="inputs-summary-box">
+                            <h4><i class="fa-solid fa-sliders"></i> Your Analyzed Input Parameters:</h4>
+                            <div class="summary-chips-grid">
+                                <div class="chip"><span>Nitrogen (N):</span> <strong>{{ result.inputs.N if result else '-' }} mg/kg</strong></div>
+                                <div class="chip"><span>Phosphorus (P):</span> <strong>{{ result.inputs.P if result else '-' }} mg/kg</strong></div>
+                                <div class="chip"><span>Potassium (K):</span> <strong>{{ result.inputs.K if result else '-' }} mg/kg</strong></div>
+                                <div class="chip"><span>Temperature:</span> <strong>{{ result.inputs.temperature if result else '-' }} °C</strong></div>
+                                <div class="chip"><span>Humidity:</span> <strong>{{ result.inputs.humidity if result else '-' }} %</strong></div>
+                                <div class="chip"><span>Soil pH:</span> <strong>{{ result.inputs.ph if result else '-' }} pH</strong></div>
+                                <div class="chip"><span>Rainfall:</span> <strong>{{ result.inputs.rainfall if result else '-' }} mm</strong></div>
+                            </div>
+                        </div>
+
+                        <!-- AGRICULTURAL GUIDANCE BOX (Separated from ML Prediction) -->
+                        <div class="agri-guidance-card">
+                            <div class="agri-header">
+                                <h3><i class="fa-solid fa-wheat-awn-circle-exclamation"></i> Agricultural & Farming Guidance</h3>
+                                <span class="guidance-tag">Informational Field Knowledge</span>
+                            </div>
+                            <div class="agri-grid">
+                                <div class="agri-item">
+                                    <div class="agri-item-title"><i class="fa-solid fa-layer-group"></i> Suitable Soil Type</div>
+                                    <p id="agri-soil">{{ result.crop_info.soil_type if result else '-' }}</p>
+                                </div>
+                                <div class="agri-item">
+                                    <div class="agri-item-title"><i class="fa-solid fa-calendar-days"></i> Growing Season</div>
+                                    <p id="agri-season">{{ result.crop_info.season if result else '-' }}</p>
+                                </div>
+                                <div class="agri-item">
+                                    <div class="agri-item-title"><i class="fa-solid fa-cubes-stacked"></i> NPK Requirement Profile</div>
+                                    <p id="agri-npk">{{ result.crop_info.npk_profile if result else '-' }}</p>
+                                </div>
+                                <div class="agri-item">
+                                    <div class="agri-item-title"><i class="fa-solid fa-clipboard-check"></i> Field Management Tips</div>
+                                    <p id="agri-tips">{{ result.crop_info.farming_guidance if result else '-' }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="sub-title">Simple Pipeline</span>
+                <h2>How CropWise AI Operates</h2>
+                <p>A transparent, mathematically rigorous 3-step process.</p>
+            </div>
+            <div class="grid grid-3 steps-grid">
+                <div class="step-card">
+                    <div class="step-number">01</div>
+                    <div class="step-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+                    <h3>Input Test Values</h3>
+                    <p>Enter Nitrogen, Phosphorus, Potassium, Temperature, Humidity, Soil pH, and Rainfall from field sensors or lab tests.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">02</div>
+                    <div class="step-icon"><i class="fa-solid fa-gears"></i></div>
+                    <h3>Standardized ML Processing</h3>
+                    <p>Data passes through `StandardScaler` normalization and is evaluated by our Random Forest classifier trained on 2,200 agricultural records.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">03</div>
+                    <div class="step-icon"><i class="fa-solid fa-apple-whole"></i></div>
+                    <h3>Crop & Agronomic Advice</h3>
+                    <p>Get instant crop identification, model confidence score, secondary alternatives, and detailed farming guidance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Supported Crops Section -->
+    <section class="crops-section" id="crops">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="sub-title">Database Overview</span>
+                <h2>22 Supported Crops</h2>
+                <p>Explore all agricultural crops recognized by our AI model.</p>
+            </div>
+
+            <!-- Crop Filter Search -->
+            <div class="crop-search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="crop-search" placeholder="Search crops (e.g. Rice, Apple, Coffee, Cotton)...">
+            </div>
+
+            <div class="crops-grid" id="crops-grid">
+                <!-- Will be populated dynamically via JavaScript or pre-rendered -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ML Performance Section -->
+    <section class="model-info-section" id="model-info">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="sub-title">Technical Credibility</span>
+                <h2>Machine Learning Model Performance</h2>
+                <p>Rigorous benchmark comparison across 5 candidate algorithms evaluated on test set.</p>
+            </div>
+
+            <div class="grid grid-2">
+                <!-- Metrics Card -->
+                <div class="card model-summary-card">
+                    <h3>🏆 Selected Model: <span class="highlight-text" id="model-best-name">Random Forest</span></h3>
+                    <p>Evaluated using stratified 80/20 train-test split on 2,200 samples.</p>
+
+                    <div class="metrics-grid">
+                        <div class="metric-box">
+                            <span class="m-value" id="model-best-acc">99.55%</span>
+                            <span class="m-label">Test Accuracy</span>
+                        </div>
+                        <div class="metric-box">
+                            <span class="m-value" id="model-best-f1">99.55%</span>
+                            <span class="m-label">F1-Score (Weighted)</span>
+                        </div>
+                    </div>
+
+                    <h4>Comparison of Tested Algorithms:</h4>
+                    <div class="table-responsive">
+                        <table class="model-table">
+                            <thead>
+                                <tr>
+                                    <th>Algorithm</th>
+                                    <th>Accuracy</th>
+                                    <th>F1-Score</th>
+                                </tr>
+                            </thead>
+                            <tbody id="model-table-body">
+                                <tr>
+                                    <td><strong>Random Forest (Selected)</strong></td>
+                                    <td><span class="badge badge-success">99.55%</span></td>
+                                    <td>99.55%</td>
+                                </tr>
+                                <tr>
+                                    <td>Support Vector Machine (SVM)</td>
+                                    <td>98.41%</td>
+                                    <td>98.40%</td>
+                                </tr>
+                                <tr>
+                                    <td>Decision Tree</td>
+                                    <td>97.95%</td>
+                                    <td>97.94%</td>
+                                </tr>
+                                <tr>
+                                    <td>K-Nearest Neighbors (KNN)</td>
+                                    <td>97.95%</td>
+                                    <td>97.93%</td>
+                                </tr>
+                                <tr>
+                                    <td>Logistic Regression</td>
+                                    <td>97.27%</td>
+                                    <td>97.25%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Confusion Matrix Card -->
+                <div class="card cm-card">
+                    <h3><i class="fa-solid fa-chart-column"></i> Confusion Matrix Heatmap</h3>
+                    <p>Evaluated on 440 test samples across 22 classes.</p>
+                    <div class="cm-image-container">
+                        <img src="{{ url_for('static', filename='images/confusion_matrix.png') }}" alt="Confusion Matrix" class="cm-img" onerror="this.src='/static/images/placeholder_cm.png'">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <div class="nav-brand">
+                    <span class="brand-icon">🌱</span>
+                    <span class="brand-name">CropWise<span class="brand-accent">.AI</span></span>
+                </div>
+                <p>AI-Powered Crop Recommendation & Agricultural Intelligence System.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Navigation</h4>
+                <ul>
+                    <li><a href="#hero">Home</a></li>
+                    <li><a href="#predictor">Crop Predictor</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#crops">Supported Crops</a></li>
+                    <li><a href="#model-info">ML Model Specs</a></li>
+                </ul>
+            </div>
+            <div class="footer-tech">
+                <h4>Built With</h4>
+                <div class="tech-tags">
+                    <span class="tag">Python 3</span>
+                    <span class="tag">Flask</span>
+                    <span class="tag">Scikit-Learn</span>
+                    <span class="tag">Pandas</span>
+                    <span class="tag">Joblib</span>
+                    <span class="tag">Vanilla CSS3</span>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom text-center">
+            <p>&copy; 2026 CropWise AI. Built for Smart Agricultural Management.</p>
+        </div>
+    </footer>
+
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,320 @@
+"""
+crop_info.py
+Contains detailed agricultural profiles, ideal NPK & weather parameters, and farming advice for all 22 supported crops.
+"""
+
+CROP_DATABASE = {
+    "rice": {
+        "name": "Rice",
+        "category": "Cereal Grain",
+        "soil_type": "Clayey, loamy, or alluvial soil with good water retention.",
+        "ideal_ph": "5.0 - 7.5",
+        "temperature_range": "20°C - 30°C",
+        "rainfall_range": "150mm - 300mm",
+        "npk_profile": "High Nitrogen (60-100), Moderate Phosphorus (35-60), Moderate Potassium (35-45)",
+        "ideal_params": {"N": 80.0, "P": 48.0, "K": 40.0, "temperature": 23.7, "humidity": 82.3, "ph": 6.4, "rainfall": 236.2},
+        "farming_guidance": "Requires flooded or waterlogged conditions during early growth phases. Ensure proper leveling of fields for uniform water depth.",
+        "season": "Kharif (Monsoon)",
+        "icon": "🌾"
+    },
+    "maize": {
+        "name": "Maize (Corn)",
+        "category": "Cereal Grain",
+        "soil_type": "Deep, well-drained fertile loamy soil rich in organic matter.",
+        "ideal_ph": "5.5 - 7.5",
+        "temperature_range": "18°C - 27°C",
+        "rainfall_range": "60mm - 110mm",
+        "npk_profile": "High Nitrogen (60-100), Moderate Phosphorus (35-60), Low-Med Potassium (15-25)",
+        "ideal_params": {"N": 78.0, "P": 48.0, "K": 20.0, "temperature": 22.4, "humidity": 65.1, "ph": 6.2, "rainfall": 84.8},
+        "farming_guidance": "Maize is sensitive to waterlogging. Maintain proper field drainage and apply nitrogen fertilizer in split doses.",
+        "season": "Kharif & Rabi",
+        "icon": "🌽"
+    },
+    "chickpea": {
+        "name": "Chickpea (Gram)",
+        "category": "Pulse / Legume",
+        "soil_type": "Deep loamy to clayey soil with good drainage.",
+        "ideal_ph": "6.0 - 9.0",
+        "temperature_range": "17°C - 22°C",
+        "rainfall_range": "65mm - 95mm",
+        "npk_profile": "Low Nitrogen (20-60), High Phosphorus (55-80), High Potassium (75-85)",
+        "ideal_params": {"N": 40.0, "P": 68.0, "K": 80.0, "temperature": 18.9, "humidity": 16.9, "ph": 7.3, "rainfall": 80.1},
+        "farming_guidance": "Leguminous crop that fixes atmospheric nitrogen. Avoid excess irrigation to prevent root rot diseases.",
+        "season": "Rabi (Winter)",
+        "icon": "🧆"
+    },
+    "kidneybeans": {
+        "name": "Kidney Beans (Rajma)",
+        "category": "Pulse / Legume",
+        "soil_type": "Well-drained light loamy soil rich in organic content.",
+        "ideal_ph": "5.5 - 6.5",
+        "temperature_range": "15°C - 25°C",
+        "rainfall_range": "60mm - 150mm",
+        "npk_profile": "Low Nitrogen (0-40), High Phosphorus (55-80), Low Potassium (15-25)",
+        "ideal_params": {"N": 21.0, "P": 68.0, "K": 20.0, "temperature": 20.1, "humidity": 21.6, "ph": 5.7, "rainfall": 105.9},
+        "farming_guidance": "Requires cool weather for germination and pod development. Protect from severe frost.",
+        "season": "Rabi (Winter)",
+        "icon": "🫘"
+    },
+    "pigeonpeas": {
+        "name": "Pigeon Peas (Arhar / Toor)",
+        "category": "Pulse / Legume",
+        "soil_type": "Deep, well-drained alluvial or loam soil.",
+        "ideal_ph": "5.0 - 7.5",
+        "temperature_range": "18°C - 37°C",
+        "rainfall_range": "90mm - 200mm",
+        "npk_profile": "Low Nitrogen (0-40), High Phosphorus (55-80), Low Potassium (15-25)",
+        "ideal_params": {"N": 21.0, "P": 68.0, "K": 20.0, "temperature": 27.7, "humidity": 48.1, "ph": 5.8, "rainfall": 149.5},
+        "farming_guidance": "Highly drought-tolerant deep-rooted pulse. Great choice for intercropping with maize or sorghum.",
+        "season": "Kharif (Monsoon)",
+        "icon": "🌱"
+    },
+    "mothbeans": {
+        "name": "Moth Beans",
+        "category": "Pulse / Legume",
+        "soil_type": "Sandy or light loamy well-drained soils.",
+        "ideal_ph": "3.5 - 10.0",
+        "temperature_range": "24°C - 32°C",
+        "rainfall_range": "30mm - 75mm",
+        "npk_profile": "Low Nitrogen (0-40), Moderate Phosphorus (35-60), Low Potassium (15-25)",
+        "ideal_params": {"N": 21.0, "P": 48.0, "K": 20.0, "temperature": 28.2, "humidity": 53.2, "ph": 6.8, "rainfall": 51.2},
+        "farming_guidance": "Extremely drought-resistant crop suitable for arid and semi-arid regions. Requires very minimal water.",
+        "season": "Kharif (Monsoon)",
+        "icon": "🌿"
+    },
+    "mungbean": {
+        "name": "Mung Bean (Green Gram)",
+        "category": "Pulse / Legume",
+        "soil_type": "Well-drained loamy soil with good moisture retention.",
+        "ideal_ph": "6.2 - 7.2",
+        "temperature_range": "27°C - 30°C",
+        "rainfall_range": "35mm - 60mm",
+        "npk_profile": "Low Nitrogen (0-40), Moderate Phosphorus (35-60), Low Potassium (15-25)",
+        "ideal_params": {"N": 21.0, "P": 47.0, "K": 20.0, "temperature": 28.5, "humidity": 85.5, "ph": 6.7, "rainfall": 48.4},
+        "farming_guidance": "Short-duration crop ideal for crop rotation. Enhances soil fertility by atmospheric nitrogen fixation.",
+        "season": "Kharif & Summer",
+        "icon": "🌱"
+    },
+    "blackgram": {
+        "name": "Black Gram (Urad)",
+        "category": "Pulse / Legume",
+        "soil_type": "Heavy clay to loamy soil with neutral pH.",
+        "ideal_ph": "6.5 - 7.8",
+        "temperature_range": "25°C - 35°C",
+        "rainfall_range": "60mm - 75mm",
+        "npk_profile": "Low Nitrogen (20-60), High Phosphorus (55-80), Low Potassium (15-25)",
+        "ideal_params": {"N": 40.0, "P": 68.0, "K": 19.0, "temperature": 30.0, "humidity": 65.1, "ph": 7.1, "rainfall": 67.9},
+        "farming_guidance": "Prefers warm and humid climate. Sensitive to water stagnation; ensure elevated seed beds if rainfall is heavy.",
+        "season": "Kharif & Summer",
+        "icon": "🫘"
+    },
+    "lentil": {
+        "name": "Lentil (Masoor)",
+        "category": "Pulse / Legume",
+        "soil_type": "Light loamy to clay soils with fair drainage.",
+        "ideal_ph": "5.9 - 7.8",
+        "temperature_range": "18°C - 30°C",
+        "rainfall_range": "35mm - 55mm",
+        "npk_profile": "Low Nitrogen (0-40), High Phosphorus (55-80), Low Potassium (15-25)",
+        "ideal_params": {"N": 19.0, "P": 68.0, "K": 19.0, "temperature": 24.5, "humidity": 64.8, "ph": 6.9, "rainfall": 45.7},
+        "farming_guidance": "Thrives under cool growing conditions. Requires light soil moisture during pod filling.",
+        "season": "Rabi (Winter)",
+        "icon": "🍲"
+    },
+    "pomegranate": {
+        "name": "Pomegranate",
+        "category": "Fruit",
+        "soil_type": "Well-drained sandy loam to clay loam soil.",
+        "ideal_ph": "5.5 - 7.2",
+        "temperature_range": "18°C - 25°C",
+        "rainfall_range": "100mm - 115mm",
+        "npk_profile": "Low Nitrogen (0-40), Low Phosphorus (5-30), Moderate Potassium (35-45)",
+        "ideal_params": {"N": 19.0, "P": 19.0, "K": 40.0, "temperature": 21.8, "humidity": 90.1, "ph": 6.4, "rainfall": 107.5},
+        "farming_guidance": "Requires semi-arid climate with hot dry summers. Pruning is essential for fruit quality.",
+        "season": "Perennial Fruit",
+        "icon": "🍎"
+    },
+    "banana": {
+        "name": "Banana",
+        "category": "Fruit",
+        "soil_type": "Deep, rich loamy soil high in organic matter and good drainage.",
+        "ideal_ph": "5.5 - 6.5",
+        "temperature_range": "25°C - 30°C",
+        "rainfall_range": "90mm - 120mm",
+        "npk_profile": "High Nitrogen (80-120), High Phosphorus (70-95), High Potassium (45-55)",
+        "ideal_params": {"N": 100.0, "P": 82.0, "K": 50.0, "temperature": 27.4, "humidity": 80.4, "ph": 6.0, "rainfall": 104.6},
+        "farming_guidance": "Heavy feeder of nutrients. Provide high organic mulch, windbreaks, and frequent shallow irrigation.",
+        "season": "Perennial Fruit",
+        "icon": "🍌"
+    },
+    "mango": {
+        "name": "Mango",
+        "category": "Fruit",
+        "soil_type": "Deep alluvial to well-drained loamy soil.",
+        "ideal_ph": "4.5 - 7.0",
+        "temperature_range": "27°C - 36°C",
+        "rainfall_range": "89mm - 101mm",
+        "npk_profile": "Low Nitrogen (0-40), Low Phosphorus (15-40), Moderate Potassium (25-35)",
+        "ideal_params": {"N": 20.0, "P": 27.0, "K": 30.0, "temperature": 31.2, "humidity": 50.2, "ph": 5.8, "rainfall": 94.7},
+        "farming_guidance": "Thrives in warm tropical climates. Requires dry spell during flowering phase for optimal fruit set.",
+        "season": "Perennial Fruit",
+        "icon": "🥭"
+    },
+    "grapes": {
+        "name": "Grapes",
+        "category": "Fruit",
+        "soil_type": "Well-drained sandy loam or alluvial soil.",
+        "ideal_ph": "5.5 - 6.5",
+        "temperature_range": "8°C - 42°C",
+        "rainfall_range": "65mm - 75mm",
+        "npk_profile": "Low Nitrogen (0-40), High Phosphorus (120-145), Very High Potassium (195-205)",
+        "ideal_params": {"N": 23.0, "P": 133.0, "K": 200.0, "temperature": 23.8, "humidity": 81.9, "ph": 6.0, "rainfall": 69.6},
+        "farming_guidance": "Requires high potassium for fruit sweetness. Needs trellising and careful pruning for ventilation.",
+        "season": "Perennial / Winter Pruning",
+        "icon": "🍇"
+    },
+    "watermelon": {
+        "name": "Watermelon",
+        "category": "Fruit",
+        "soil_type": "Sandy loam soil rich in organic content with excellent drainage.",
+        "ideal_ph": "6.0 - 7.0",
+        "temperature_range": "24°C - 27°C",
+        "rainfall_range": "40mm - 60mm",
+        "npk_profile": "High Nitrogen (80-120), Low Phosphorus (5-30), High Potassium (45-55)",
+        "ideal_params": {"N": 99.0, "P": 17.0, "K": 50.0, "temperature": 25.6, "humidity": 85.2, "ph": 6.5, "rainfall": 50.8},
+        "farming_guidance": "Requires warm sunshine and low relative humidity during fruit maturation to maximize sugar content.",
+        "season": "Summer / Zaid",
+        "icon": "🍉"
+    },
+    "muskmelon": {
+        "name": "Muskmelon",
+        "category": "Fruit",
+        "soil_type": "Well-drained sandy loam soil.",
+        "ideal_ph": "6.0 - 6.8",
+        "temperature_range": "27°C - 30°C",
+        "rainfall_range": "20mm - 30mm",
+        "npk_profile": "High Nitrogen (80-120), Low Phosphorus (5-30), High Potassium (45-55)",
+        "ideal_params": {"N": 100.0, "P": 18.0, "K": 50.0, "temperature": 28.7, "humidity": 92.3, "ph": 6.4, "rainfall": 24.7},
+        "farming_guidance": "Prefers warm dry weather. Avoid overhead watering during fruit ripening to prevent fungal infection.",
+        "season": "Summer / Zaid",
+        "icon": "🍈"
+    },
+    "apple": {
+        "name": "Apple",
+        "category": "Fruit",
+        "soil_type": "Well-drained, deep loamy soil rich in organic humus.",
+        "ideal_ph": "5.5 - 6.5",
+        "temperature_range": "21°C - 24°C",
+        "rainfall_range": "100mm - 125mm",
+        "npk_profile": "Low Nitrogen (0-40), High Phosphorus (120-145), Very High Potassium (195-205)",
+        "ideal_params": {"N": 21.0, "P": 134.0, "K": 200.0, "temperature": 22.6, "humidity": 92.3, "ph": 5.9, "rainfall": 112.7},
+        "farming_guidance": "Temperate fruit requiring winter chilling hours for bud break. Ensure high potassium supply.",
+        "season": "Temperate / Autumn Harvest",
+        "icon": "🍎"
+    },
+    "orange": {
+        "name": "Orange (Citrus)",
+        "category": "Fruit",
+        "soil_type": "Deep well-drained sandy loam or clay loam soil.",
+        "ideal_ph": "6.0 - 8.0",
+        "temperature_range": "10°C - 35°C",
+        "rainfall_range": "100mm - 120mm",
+        "npk_profile": "Low Nitrogen (0-40), Low Phosphorus (5-30), Low Potassium (5-15)",
+        "ideal_params": {"N": 20.0, "P": 17.0, "K": 10.0, "temperature": 22.8, "humidity": 92.2, "ph": 7.0, "rainfall": 110.5},
+        "farming_guidance": "Citrus crop sensitive to waterlogging. Apply micronutrients like Zinc and Boron for sweet juice quality.",
+        "season": "Sub-tropical / Winter",
+        "icon": "🍊"
+    },
+    "papaya": {
+        "name": "Papaya",
+        "category": "Fruit",
+        "soil_type": "Rich loamy soil with high organic matter and quick drainage.",
+        "ideal_ph": "6.5 - 7.0",
+        "temperature_range": "23°C - 44°C",
+        "rainfall_range": "40mm - 250mm",
+        "npk_profile": "Moderate Nitrogen (30-70), High Phosphorus (46-70), High Potassium (45-55)",
+        "ideal_params": {"N": 50.0, "P": 59.0, "K": 50.0, "temperature": 33.7, "humidity": 92.4, "ph": 6.7, "rainfall": 142.6},
+        "farming_guidance": "Fast-growing fruit tree. Extremely sensitive to waterlogging which induces root rot within 48 hours.",
+        "season": "Year-round",
+        "icon": "🥭"
+    },
+    "coconut": {
+        "name": "Coconut",
+        "category": "Plantation Crop",
+        "soil_type": "Coastal alluvial, sandy, or laterite soil.",
+        "ideal_ph": "5.5 - 6.5",
+        "temperature_range": "25°C - 30°C",
+        "rainfall_range": "130mm - 230mm",
+        "npk_profile": "Low Nitrogen (0-40), Low Phosphorus (5-30), Moderate Potassium (25-35)",
+        "ideal_params": {"N": 22.0, "P": 17.0, "K": 31.0, "temperature": 27.4, "humidity": 94.8, "ph": 6.0, "rainfall": 175.7},
+        "farming_guidance": "Requires high atmospheric humidity and abundant sunlight. Regular salt and potash fertilization improves nut size.",
+        "season": "Perennial Plantation",
+        "icon": "🥥"
+    },
+    "cotton": {
+        "name": "Cotton",
+        "category": "Fiber Crop",
+        "soil_type": "Deep black cotton soil (Vertisols) or fertile alluvial soil.",
+        "ideal_ph": "5.8 - 8.0",
+        "temperature_range": "22°C - 26°C",
+        "rainfall_range": "60mm - 100mm",
+        "npk_profile": "High Nitrogen (100-140), Moderate Phosphorus (35-60), Low Potassium (15-25)",
+        "ideal_params": {"N": 118.0, "P": 46.0, "K": 20.0, "temperature": 24.0, "humidity": 79.8, "ph": 6.9, "rainfall": 80.4},
+        "farming_guidance": "Requires 180-200 frost-free days. Needs dry weather during boll opening and harvesting.",
+        "season": "Kharif (Monsoon)",
+        "icon": "☁️"
+    },
+    "jute": {
+        "name": "Jute (Golden Fiber)",
+        "category": "Fiber Crop",
+        "soil_type": "New alluvial sandy loam soil.",
+        "ideal_ph": "6.0 - 7.5",
+        "temperature_range": "23°C - 27°C",
+        "rainfall_range": "150mm - 200mm",
+        "npk_profile": "High Nitrogen (60-100), Moderate Phosphorus (35-60), Moderate Potassium (35-45)",
+        "ideal_params": {"N": 78.0, "P": 47.0, "K": 40.0, "temperature": 25.0, "humidity": 79.6, "ph": 6.7, "rainfall": 174.8},
+        "farming_guidance": "Requires hot and humid climate with clean water body nearby for retting the fiber.",
+        "season": "Kharif (Monsoon)",
+        "icon": "🎋"
+    },
+    "coffee": {
+        "name": "Coffee",
+        "category": "Commercial / Beverage",
+        "soil_type": "Deep, porous friable loamy soil rich in humus.",
+        "ideal_ph": "6.0 - 7.5",
+        "temperature_range": "23°C - 28°C",
+        "rainfall_range": "115mm - 200mm",
+        "npk_profile": "High Nitrogen (80-120), Low-Med Phosphorus (15-40), Moderate Potassium (25-35)",
+        "ideal_params": {"N": 101.0, "P": 29.0, "K": 30.0, "temperature": 25.5, "humidity": 58.9, "ph": 6.8, "rainfall": 158.1},
+        "farming_guidance": "Grown under partial shade of canopy trees on hill slopes. Pruning and weed control enhance berry yield.",
+        "season": "Perennial Plantation",
+        "icon": "☕"
+    }
+}
+
+FEATURE_LIMITS = {
+    "N": {"min": 0, "max": 140, "label": "Nitrogen (N)", "unit": "mg/kg", "desc": "Soil Nitrogen level"},
+    "P": {"min": 5, "max": 145, "label": "Phosphorus (P)", "unit": "mg/kg", "desc": "Soil Phosphorus level"},
+    "K": {"min": 5, "max": 205, "label": "Potassium (K)", "unit": "mg/kg", "desc": "Soil Potassium level"},
+    "temperature": {"min": 8.0, "max": 45.0, "label": "Temperature", "unit": "°C", "desc": "Ambient Air Temperature"},
+    "humidity": {"min": 14.0, "max": 100.0, "label": "Humidity", "unit": "%", "desc": "Relative Humidity"},
+    "ph": {"min": 3.5, "max": 10.0, "label": "Soil pH", "unit": "pH", "desc": "Soil Acidic/Alkaline measure"},
+    "rainfall": {"min": 20.0, "max": 350.0, "label": "Rainfall", "unit": "mm", "desc": "Annual/Season Rainfall"}
+}
+
+def get_crop_info(crop_key: str) -> dict:
+    """Return dictionary of agricultural details for a given crop name."""
+    key = str(crop_key).strip().lower()
+    return CROP_DATABASE.get(key, {
+        "name": crop_key.capitalize(),
+        "category": "Agricultural Crop",
+        "soil_type": "Fertile, well-drained agricultural soil.",
+        "ideal_ph": "6.0 - 7.5",
+        "temperature_range": "20°C - 30°C",
+        "rainfall_range": "50mm - 200mm",
+        "npk_profile": "Balanced N-P-K nutrients.",
+        "ideal_params": {"N": 50.0, "P": 45.0, "K": 35.0, "temperature": 25.0, "humidity": 70.0, "ph": 6.5, "rainfall": 100.0},
+        "farming_guidance": "Follow standard agricultural extension practices for optimal yield.",
+        "season": "General Growing Season",
+        "icon": "🌱"
+    })
