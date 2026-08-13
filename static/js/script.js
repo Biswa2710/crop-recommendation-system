@@ -339,6 +339,18 @@ document.addEventListener('DOMContentLoaded', () => {
             `).join('');
         }
 
+        // Agronomic & Farming Guidance Card
+        if (data.crop_info) {
+            const soilEl = document.getElementById('agri-soil');
+            const seasonEl = document.getElementById('agri-season');
+            const npkEl = document.getElementById('agri-npk');
+            const tipsEl = document.getElementById('agri-tips');
+            if (soilEl) soilEl.textContent = data.crop_info.soil_type || '-';
+            if (seasonEl) seasonEl.textContent = data.crop_info.season || '-';
+            if (npkEl) npkEl.textContent = data.crop_info.npk_profile || '-';
+            if (tipsEl) tipsEl.textContent = data.crop_info.farming_guidance || '-';
+        }
+
         // Scroll smoothly to results
         resultWrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
