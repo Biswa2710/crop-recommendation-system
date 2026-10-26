@@ -1,7 +1,7 @@
 """
 streamlit_app.py
-CropWise AI — Interactive Crop Recommendation System built with Streamlit.
-Integrates trained Random Forest model (99.55% test accuracy) with verified agronomic reference data.
+CropWise.AI — Streamlit version matching the original Flask app theme exactly.
+Green gradient hero, premium card layout, stat boxes, preset buttons, result cards.
 """
 
 import os
@@ -10,444 +10,1215 @@ import json
 import pandas as pd
 import streamlit as st
 
-# Ensure project root is in sys.path
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 from src.prediction import CropPredictor
-from src.crop_info import CROP_DATABASE, FEATURE_LIMITS, get_crop_info, load_crop_information_db
+from src.crop_info import FEATURE_LIMITS, get_crop_info, load_crop_information_db
 
-
-# --- PAGE CONFIGURATION ---
+# ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="CropWise AI — Crop Recommendation System",
+    page_title="CropWise.AI — ML Crop Recommendation",
     page_icon="🌱",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
-# --- CUSTOM CSS ---
+# ── Inject the full CropWise theme CSS ───────────────────────────────────────
 st.markdown("""
 <style>
-    .main-header {
-        font-size: 2.2rem;
-        font-weight: 700;
-        color: #1b5e20;
-        margin-bottom: 0.2rem;
-    }
-    .sub-header {
-        font-size: 1.05rem;
-        color: #4b6b50;
-        margin-bottom: 1.5rem;
-    }
-    .metric-card {
-        background-color: #f8faf8;
-        border: 1px solid #e0e8e0;
-        border-radius: 10px;
-        padding: 1.2rem;
-        margin-bottom: 1rem;
-    }
-    .recommend-badge {
-        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
-        color: white !important;
-        border-radius: 12px;
-        padding: 1.5rem;
-        text-align: center;
-        box-shadow: 0 4px 12px rgba(46, 125, 50, 0.15);
-    }
-    .recommend-title {
-        font-size: 2.4rem;
-        font-weight: 800;
-        margin-bottom: 0.2rem;
-    }
-    .disclaimer-box {
-        background-color: #fffde7;
-        border-left: 4px solid #fbc02d;
-        padding: 0.9rem;
-        border-radius: 4px;
-        font-size: 0.88rem;
-        color: #5d4037;
-        margin-top: 1rem;
-    }
-    .stProgress > div > div > div > div {
-        background-color: #2e7d32;
-    }
+/* ── Google Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+/* ── CSS Variables ── */
+:root {
+    --primary-900: #064e3b;
+    --primary-800: #065f46;
+    --primary-700: #047857;
+    --primary-600: #059669;
+    --primary-500: #10b981;
+    --primary-400: #34d399;
+    --primary-100: #d1fae5;
+    --primary-50:  #ecfdf5;
+    --accent-amber: #f59e0b;
+    --accent-amber-light: #fef3c7;
+    --accent-teal: #14b8a6;
+    --dark-900: #0f172a;
+    --dark-800: #1e293b;
+    --dark-700: #334155;
+    --dark-600: #475569;
+    --gray-400: #94a3b8;
+    --gray-300: #cbd5e1;
+    --gray-200: #e2e8f0;
+    --gray-100: #f1f5f9;
+    --gray-50:  #f8fafc;
+    --white: #ffffff;
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
+    --shadow-md: 0 8px 24px rgba(6,78,59,0.08);
+    --shadow-lg: 0 16px 36px rgba(6,78,59,0.12);
+}
+
+/* ── Global resets ── */
+html, body, [class*="css"] {
+    font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
+    background-color: var(--gray-50) !important;
+    color: var(--dark-800) !important;
+}
+
+/* Hide Streamlit chrome */
+#MainMenu, footer, header { visibility: hidden; }
+.stDeployButton { display: none; }
+div[data-testid="stToolbar"] { display: none; }
+
+/* ── NAVBAR ── */
+.cw-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(226,232,240,0.8);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+    margin: -24px -24px 0 -24px;
+}
+.cw-brand {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--dark-900);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.cw-brand-accent { color: var(--primary-600); }
+.cw-nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+}
+.cw-nav-links a {
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--dark-700);
+    text-decoration: none;
+}
+.cw-nav-links a:hover { color: var(--primary-600); }
+
+/* ── HERO SECTION ── */
+.cw-hero {
+    position: relative;
+    padding: 80px 0 60px;
+    background: radial-gradient(circle at 50% 10%, var(--primary-50) 0%, var(--gray-50) 70%);
+    text-align: center;
+    overflow: hidden;
+    border-bottom: 1px solid var(--gray-200);
+    margin-bottom: 40px;
+}
+.cw-hero::before {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    background: var(--primary-400);
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.25;
+    top: -100px; right: -100px;
+}
+.cw-hero::after {
+    content: '';
+    position: absolute;
+    width: 300px; height: 300px;
+    background: var(--accent-amber);
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.2;
+    bottom: -50px; left: -50px;
+}
+.cw-hero-inner { position: relative; z-index: 1; }
+
+.cw-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background: var(--white);
+    border: 1px solid var(--primary-100);
+    border-radius: 50px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--primary-700);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 24px;
+}
+.pulse-dot {
+    width: 8px; height: 8px;
+    background: var(--primary-500);
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(16,185,129,0.7); }
+    70%  { box-shadow: 0 0 0 10px rgba(16,185,129,0); }
+    100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+}
+
+.cw-hero-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--dark-900);
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+    line-height: 1.2;
+}
+.gradient-text {
+    background: linear-gradient(135deg, var(--primary-600) 0%, var(--accent-teal) 50%, var(--primary-400) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.cw-hero-subtitle {
+    font-size: 1.1rem;
+    color: var(--dark-600);
+    max-width: 720px;
+    margin: 0 auto 36px;
+}
+
+/* ── HERO STATS ── */
+.cw-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 24px 32px;
+    border: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-lg);
+    max-width: 900px;
+    margin: 0 auto;
+}
+.cw-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.cw-stat-icon {
+    width: 50px; height: 50px;
+    border-radius: 14px;
+    background: var(--primary-50);
+    color: var(--primary-600);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+.cw-stat-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--dark-900);
+    display: block;
+    line-height: 1.1;
+}
+.cw-stat-label {
+    font-size: 0.8rem;
+    color: var(--gray-400);
+    font-weight: 600;
+}
+
+/* ── SECTION LABELS ── */
+.section-sub {
+    display: inline-block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--primary-600);
+    background: var(--primary-50);
+    padding: 5px 14px;
+    border-radius: 50px;
+    margin-bottom: 10px;
+}
+.section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--dark-900);
+    margin-bottom: 8px;
+}
+.section-desc {
+    font-size: 1rem;
+    color: var(--dark-600);
+    max-width: 640px;
+    margin: 0 auto 32px;
+}
+
+/* ── CARDS ── */
+.cw-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 24px;
+}
+
+/* ── PRESET BUTTONS ── */
+.preset-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: var(--white);
+    padding: 14px 20px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--gray-200);
+    margin-bottom: 20px;
+}
+.preset-label {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--dark-700);
+    white-space: nowrap;
+}
+
+/* ── FORM INPUTS ── */
+.stNumberInput > div > div > input,
+.stSlider, .stTextInput > div > div > input {
+    border-radius: var(--radius-sm) !important;
+    border: 1.5px solid var(--gray-300) !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+.stNumberInput > div > div > input:focus {
+    border-color: var(--primary-500) !important;
+    box-shadow: 0 0 0 3px rgba(16,185,129,0.12) !important;
+}
+
+/* ── SUBMIT BUTTON ── */
+.stFormSubmitButton > button {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 50px !important;
+    padding: 14px 36px !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    box-shadow: 0 6px 20px rgba(5,150,105,0.30) !important;
+    transition: all 0.3s ease !important;
+    width: 100% !important;
+}
+.stFormSubmitButton > button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 28px rgba(5,150,105,0.40) !important;
+}
+
+/* ── RESULT CARD ── */
+.result-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    box-shadow: var(--shadow-lg);
+    margin-top: 28px;
+}
+.result-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--gray-200);
+}
+.badge-ml {
+    background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+.badge-model {
+    background: var(--gray-100);
+    color: var(--dark-700);
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+/* ── CROP HERO BANNER ── */
+.crop-banner {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: linear-gradient(135deg, var(--primary-50) 0%, #f0fdf4 100%);
+    border: 1px solid var(--primary-100);
+    border-radius: var(--radius-md);
+    padding: 28px;
+    margin-bottom: 24px;
+}
+.crop-icon-big { font-size: 4rem; line-height: 1; }
+.hero-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--primary-600);
+    display: block;
+    margin-bottom: 4px;
+}
+.crop-hero-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--dark-900);
+    margin: 0 0 8px;
+}
+.crop-explanation {
+    font-size: 0.92rem;
+    color: var(--dark-600);
+    margin: 0;
+}
+
+/* ── CONFIDENCE BOX ── */
+.conf-box {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    text-align: center;
+    min-width: 180px;
+}
+.conf-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gray-400);
+    display: block;
+    margin-bottom: 8px;
+}
+.conf-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--primary-600);
+}
+.conf-bar-wrap {
+    height: 8px;
+    background: var(--gray-200);
+    border-radius: 50px;
+    margin: 10px 0 6px;
+    overflow: hidden;
+}
+.conf-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-500), var(--primary-700));
+    border-radius: 50px;
+    transition: width 1s ease;
+}
+.conf-disclaimer {
+    font-size: 0.75rem;
+    color: var(--gray-400);
+    line-height: 1.4;
+}
+
+/* ── ALT CHIP ── */
+.alt-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 50px;
+    padding: 8px 16px;
+    margin: 4px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+.alt-conf {
+    background: var(--primary-50);
+    color: var(--primary-700);
+    padding: 2px 8px;
+    border-radius: 50px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+/* ── HEALTH GRID ── */
+.health-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+}
+.health-card {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+}
+.h-feature {
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--dark-800);
+    display: block;
+    margin-bottom: 4px;
+}
+.h-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-600);
+    display: block;
+}
+.h-range {
+    font-size: 0.75rem;
+    color: var(--gray-400);
+    margin-top: 4px;
+}
+
+/* ── AGRI GUIDANCE CARD ── */
+.agri-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    margin-top: 20px;
+}
+.agri-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+.agri-header h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--dark-900);
+    margin: 0;
+}
+.guidance-tag {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--primary-700);
+    background: var(--primary-50);
+    padding: 3px 12px;
+    border-radius: 50px;
+}
+.agri-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+.agri-item {
+    background: var(--gray-50);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    border: 1px solid var(--gray-100);
+}
+.agri-item-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--primary-600);
+    margin-bottom: 6px;
+}
+.agri-item p {
+    font-size: 0.92rem;
+    color: var(--dark-700);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ── FEATURE BOXES ── */
+.feat-box {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    padding: 28px 22px;
+    transition: all 0.3s ease;
+}
+.feat-box:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-400);
+}
+.feat-icon {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+}
+.icon-emerald { background: var(--primary-100); color: var(--primary-700); }
+.icon-teal { background: #ccfbf1; color: var(--accent-teal); }
+.icon-amber { background: var(--accent-amber-light); color: var(--accent-amber); }
+.feat-box h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--dark-900);
+    margin-bottom: 8px;
+}
+.feat-box p { font-size: 0.92rem; color: var(--dark-600); margin: 0; }
+
+/* ── STEP CARDS ── */
+.step-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    padding: 32px 24px;
+    text-align: center;
+    position: relative;
+}
+.step-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary-100);
+    position: absolute;
+    top: 16px; right: 20px;
+    line-height: 1;
+}
+.step-icon {
+    font-size: 2rem;
+    margin-bottom: 14px;
+    color: var(--primary-600);
+}
+.step-card h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--dark-900);
+    margin-bottom: 8px;
+}
+.step-card p { font-size: 0.9rem; color: var(--dark-600); margin: 0; }
+
+/* ── METRIC BOXES ── */
+.metric-box {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    text-align: center;
+}
+.m-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary-600);
+    display: block;
+}
+.m-label {
+    font-size: 0.8rem;
+    color: var(--gray-400);
+    font-weight: 600;
+    margin-top: 4px;
+    display: block;
+}
+
+/* ── MODEL TABLE ── */
+.model-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+.model-table th {
+    background: var(--gray-50);
+    font-weight: 700;
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--dark-600);
+    border-bottom: 2px solid var(--gray-200);
+}
+.model-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--dark-700);
+}
+.model-table tr:last-child td { border-bottom: none; }
+.badge-success {
+    background: var(--primary-100);
+    color: var(--primary-700);
+    padding: 3px 10px;
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+/* ── CROP CARDS GRID ── */
+.crop-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    padding: 22px 18px;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+.crop-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-400);
+}
+.crop-card-icon { font-size: 2.4rem; margin-bottom: 10px; display: block; }
+.crop-card-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--dark-900);
+    margin-bottom: 4px;
+}
+.crop-card-cat {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--primary-600);
+    background: var(--primary-50);
+    padding: 2px 10px;
+    border-radius: 50px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+.crop-card p { font-size: 0.85rem; color: var(--dark-600); margin: 4px 0; }
+
+/* ── DISCLAIMER ── */
+.agri-disclaimer {
+    background: var(--accent-amber-light);
+    border-left: 4px solid var(--accent-amber);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    color: #78350f;
+    margin-top: 16px;
+}
+
+/* ── FOOTER ── */
+.cw-footer {
+    background: var(--dark-800);
+    color: #94a3b8;
+    padding: 40px 0 20px;
+    margin-top: 60px;
+    text-align: center;
+    border-top: 1px solid var(--dark-700);
+}
+.cw-footer-brand {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 6px;
+}
+.cw-footer-brand span { color: var(--primary-400); }
+.cw-footer p { font-size: 0.88rem; max-width: 700px; margin: 0 auto 20px; }
+.tech-tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.tag {
+    background: var(--dark-700);
+    color: var(--gray-300);
+    padding: 4px 14px;
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+.fert-item {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+}
+.fert-nutrient { font-weight: 700; font-size: 0.92rem; color: var(--dark-800); margin-bottom: 6px; }
+.fert-advice { font-size: 0.88rem; color: var(--dark-600); margin: 0; }
+
+/* Tab styling */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 8px;
+    background: var(--white);
+    border-radius: var(--radius-md);
+    padding: 6px;
+    border: 1px solid var(--gray-200);
+    margin-bottom: 24px;
+}
+.stTabs [data-baseweb="tab"] {
+    border-radius: var(--radius-sm) !important;
+    font-weight: 600 !important;
+    font-size: 0.92rem !important;
+    color: var(--dark-700) !important;
+    padding: 10px 20px !important;
+}
+.stTabs [aria-selected="true"] {
+    background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%) !important;
+    color: white !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
 
-# --- LOAD PREDICTOR SINGLETON (CACHED) ---
+# ── Load model (cached) ───────────────────────────────────────────────────────
 @st.cache_resource
 def load_predictor():
     try:
         return CropPredictor()
     except Exception as e:
-        st.error(f"⚠️ Error loading model artifacts: {e}")
         return None
 
 predictor = load_predictor()
 
 # Load metadata
-metadata_path = os.path.join(PROJECT_ROOT, "models", "metadata.json")
+meta_path = os.path.join(PROJECT_ROOT, "models", "metadata.json")
 metadata = {}
-if os.path.exists(metadata_path):
-    with open(metadata_path, "r", encoding="utf-8") as f:
+if os.path.exists(meta_path):
+    with open(meta_path, "r", encoding="utf-8") as f:
         metadata = json.load(f)
 
+db = load_crop_information_db()
 
-# --- SIDEBAR CONTROLS & PRESETS ---
-st.sidebar.image("https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=400&q=80", use_container_width=True)
-st.sidebar.markdown("## 🌱 CropWise AI")
-st.sidebar.markdown("**Decision-Support System for Crop Recommendation**")
-st.sidebar.caption("Trained on 2,200 multi-crop agro-climatic benchmark observations across 22 crop classes.")
+# ── NAVBAR ───────────────────────────────────────────────────────────────────
+st.markdown("""
+<div class="cw-navbar">
+  <div class="cw-brand">🌱 CropWise<span class="cw-brand-accent">.AI</span></div>
+  <ul class="cw-nav-links">
+    <li><a href="#predictor">Predictor</a></li>
+    <li><a href="#explorer">Crop Explorer</a></li>
+    <li><a href="#ml-performance">ML Performance</a></li>
+  </ul>
+</div>
+""", unsafe_allow_html=True)
 
-st.sidebar.markdown("---")
-st.sidebar.markdown("### ⚡ Quick Presets")
-st.sidebar.write("Load typical parameter profiles:")
+# ── HERO ─────────────────────────────────────────────────────────────────────
+st.markdown("""
+<div class="cw-hero">
+  <div class="cw-hero-inner">
+    <div class="cw-hero-badge">
+      <span class="pulse-dot"></span>
+      <span>Machine Learning Decision Support</span>
+    </div>
+    <h1 class="cw-hero-title">
+      Intelligent Crop Recommendations <br>
+      Powered by <span class="gradient-text">Machine Learning</span>
+    </h1>
+    <p class="cw-hero-subtitle">
+      Analyze soil and environmental conditions to identify crops best suited for your field.
+      Receive ML predictions, parameter summaries, and agricultural reference guidance.
+    </p>
+    <div class="cw-stats-grid">
+      <div class="cw-stat-card">
+        <div class="cw-stat-icon">🌾</div>
+        <div>
+          <span class="cw-stat-value">22</span>
+          <span class="cw-stat-label">Supported Crops</span>
+        </div>
+      </div>
+      <div class="cw-stat-card">
+        <div class="cw-stat-icon">🗄️</div>
+        <div>
+          <span class="cw-stat-value">2,200</span>
+          <span class="cw-stat-label">Dataset Samples</span>
+        </div>
+      </div>
+      <div class="cw-stat-card">
+        <div class="cw-stat-icon">🧠</div>
+        <div>
+          <span class="cw-stat-value">5</span>
+          <span class="cw-stat-label">ML Algorithms Evaluated</span>
+        </div>
+      </div>
+      <div class="cw-stat-card">
+        <div class="cw-stat-icon">✅</div>
+        <div>
+          <span class="cw-stat-value">99.55%</span>
+          <span class="cw-stat-label">Benchmark Test Accuracy</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+""", unsafe_allow_html=True)
 
-# Presets defined from dataset averages
-PRESETS = {
-    "Select a preset...": None,
-    "🌾 Rice (Wetland / High Rainfall)": {
-        "N": 80.0, "P": 48.0, "K": 40.0, "temperature": 23.7, "humidity": 82.3, "ph": 6.4, "rainfall": 236.0
-    },
-    "🌽 Maize / Corn (Sub-humid / Moderate)": {
-        "N": 78.0, "P": 48.0, "K": 20.0, "temperature": 22.4, "humidity": 65.1, "ph": 6.2, "rainfall": 85.0
-    },
-    "☕ Coffee (Humid Mountain / Acidic)": {
-        "N": 101.0, "P": 29.0, "K": 30.0, "temperature": 25.5, "humidity": 58.9, "ph": 6.8, "rainfall": 158.0
-    },
-    "☁️ Cotton (Semi-Arid / High Potash)": {
-        "N": 118.0, "P": 46.0, "K": 19.0, "temperature": 24.0, "humidity": 79.8, "ph": 6.9, "rainfall": 80.0
-    },
-    "🥣 Chickpea (Dryland Legume)": {
-        "N": 40.0, "P": 68.0, "K": 80.0, "temperature": 18.9, "humidity": 16.9, "ph": 7.3, "rainfall": 80.0
-    },
-    "🍎 Apple (Cool Temperate)": {
-        "N": 21.0, "P": 134.0, "K": 199.0, "temperature": 22.6, "humidity": 92.3, "ph": 5.9, "rainfall": 113.0
-    },
-    "🥥 Coconut (Coastal / High Humidity)": {
-        "N": 22.0, "P": 17.0, "K": 31.0, "temperature": 27.4, "humidity": 94.8, "ph": 6.0, "rainfall": 175.0
-    }
-}
+# ── HOW IT WORKS ─────────────────────────────────────────────────────────────
+st.markdown("""
+<div style="text-align:center; padding: 0 0 20px;">
+  <span class="section-sub">Scientific Feature Overview</span>
+  <h2 class="section-title">How the ML Model Evaluates Inputs</h2>
+  <p class="section-desc">CropWise.AI maps 7 multi-dimensional soil chemistry and climatic features to historical crop cultivation records using Random Forest classification.</p>
+</div>
+<div style="display:grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-bottom: 48px;">
+  <div class="feat-box">
+    <div class="feat-icon icon-emerald">🧪</div>
+    <h3>Soil Nutrient Indices (N-P-K)</h3>
+    <p>Nitrogen, Phosphorus, and Potassium represent numerical soil nutrient feature indices as captured in the benchmark dataset.</p>
+  </div>
+  <div class="feat-box">
+    <div class="feat-icon icon-teal">🌦️</div>
+    <h3>Climatic Profile</h3>
+    <p>Ambient air temperature (°C) and relative humidity (%) govern plant transpiration and thermal stress windows.</p>
+  </div>
+  <div class="feat-box">
+    <div class="feat-icon icon-amber">💧</div>
+    <h3>Soil pH & Rainfall</h3>
+    <p>Soil pH measures acidity/alkalinity influencing nutrient availability, while rainfall (mm) indicates seasonal water supply.</p>
+  </div>
+</div>
+""", unsafe_allow_html=True)
 
-preset_choice = st.sidebar.selectbox("Choose Sample Scenario:", list(PRESETS.keys()))
-
-# Update session state if a preset is selected
-if preset_choice and PRESETS[preset_choice] is not None:
-    vals = PRESETS[preset_choice]
-    for k, v in vals.items():
-        st.session_state[f"input_{k}"] = v
-
-# Navigation tabs in main body
-tab1, tab2, tab3, tab4 = st.tabs([
-    "🌾 Crop Recommendation",
-    "📖 Crop Knowledge Base (22 Crops)",
-    "📊 Model Benchmarks & Transparency",
-    "ℹ️ About & Scientific Notes"
+# ── MAIN TABS ─────────────────────────────────────────────────────────────────
+tab1, tab2, tab3 = st.tabs([
+    "🌾 Field Predictor",
+    "🔍 Crop Explorer",
+    "📊 ML Performance"
 ])
 
-
-# ==============================================================================
-# TAB 1: CROP RECOMMENDATION ENGINE
-# ==============================================================================
+# ══════════════════════════════════════════════════════════════════════════════
+# TAB 1 — PREDICTOR
+# ══════════════════════════════════════════════════════════════════════════════
 with tab1:
-    st.markdown('<div class="main-header">🌾 Crop Recommendation Engine</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="sub-header">Enter your soil nutrient indices and local environmental parameters to receive data-driven crop suitability recommendations.</div>',
-        unsafe_allow_html=True
-    )
+    st.markdown("""
+    <div id="predictor" style="text-align:center; margin-bottom:24px;">
+      <span class="section-sub">Interactive Model Predictor</span>
+      <h2 class="section-title">Field Feature Analysis & Crop Predictor</h2>
+      <p class="section-desc">Select a preset or enter your 7 soil and climate parameter values below.</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-    with st.expander("📌 Important Unit & Scientific Interpretation Notice", expanded=False):
-        st.info(
-            "**Nutrient Feature Index:** N, P, and K values represent relative dataset feature indices (0-140 for N, 5-145 for P, 5-205 for K) "
-            "as recorded in the benchmark crop recommendation dataset. They do not represent raw chemical laboratory mg/kg values directly.\n\n"
-            "**Probability Disclaimers:** Reported confidence scores reflect the model's Softmax / Random Forest ensemble class probability and have not been calibrated via Platt scaling."
-        )
+    # Presets
+    PRESETS = {
+        "🌾 Rice": {"N":80,"P":48,"K":40,"temperature":23.7,"humidity":82.3,"ph":6.4,"rainfall":236.0},
+        "🌽 Maize": {"N":78,"P":48,"K":20,"temperature":22.4,"humidity":65.1,"ph":6.2,"rainfall":85.0},
+        "☁️ Cotton": {"N":118,"P":46,"K":19,"temperature":24.0,"humidity":79.8,"ph":6.9,"rainfall":80.0},
+        "☕ Coffee": {"N":101,"P":29,"K":30,"temperature":25.5,"humidity":58.9,"ph":6.8,"rainfall":158.0},
+        "🍎 Apple": {"N":21,"P":134,"K":199,"temperature":22.6,"humidity":92.3,"ph":5.9,"rainfall":113.0},
+        "🍉 Watermelon": {"N":100,"P":17,"K":50,"temperature":25.6,"humidity":85.0,"ph":6.5,"rainfall":50.0},
+    }
 
-    # Input Form
-    with st.form("prediction_form"):
+    pcols = st.columns(len(PRESETS) + 1)
+    pcols[0].markdown('<div style="padding-top:8px; font-weight:700; font-size:0.9rem; color:#334155;">💡 Preset:</div>', unsafe_allow_html=True)
+    for i, (label, vals) in enumerate(PRESETS.items()):
+        if pcols[i + 1].button(label, key=f"preset_{i}"):
+            for k, v in vals.items():
+                st.session_state[f"inp_{k}"] = v
+            st.rerun()
+
+    # Form
+    with st.form("predictor_form"):
         col1, col2 = st.columns(2)
-
         with col1:
             st.markdown("#### 🧪 Soil Nutrient Indices")
-            val_n = st.slider(
-                "Nitrogen (N) Index",
-                min_value=0.0, max_value=140.0,
-                value=float(st.session_state.get("input_N", 80.0)),
-                step=1.0,
-                help="Relative Soil Nitrogen feature index (Range: 0 to 140)"
-            )
-            val_p = st.slider(
-                "Phosphorus (P) Index",
-                min_value=5.0, max_value=145.0,
-                value=float(st.session_state.get("input_P", 48.0)),
-                step=1.0,
-                help="Relative Soil Phosphorus feature index (Range: 5 to 145)"
-            )
-            val_k = st.slider(
-                "Potassium (K) Index",
-                min_value=5.0, max_value=205.0,
-                value=float(st.session_state.get("input_K", 40.0)),
-                step=1.0,
-                help="Relative Soil Potassium feature index (Range: 5 to 205)"
-            )
-            val_ph = st.slider(
-                "Soil pH Level",
-                min_value=3.5, max_value=10.0,
-                value=float(st.session_state.get("input_ph", 6.5)),
-                step=0.1,
-                help="Soil Acidity / Alkalinity level (pH scale 3.5 to 10.0)"
-            )
-
+            n_val = st.number_input("Nitrogen (N) — Index", 0.0, 140.0, float(st.session_state.get("inp_N", 90.0)), 1.0, help="Dataset range: 0 – 140")
+            p_val = st.number_input("Phosphorus (P) — Index", 5.0, 145.0, float(st.session_state.get("inp_P", 42.0)), 1.0, help="Dataset range: 5 – 145")
+            k_val = st.number_input("Potassium (K) — Index", 5.0, 205.0, float(st.session_state.get("inp_K", 43.0)), 1.0, help="Dataset range: 5 – 205")
+            ph_val = st.number_input("Soil pH", 3.5, 10.0, float(st.session_state.get("inp_ph", 6.5)), 0.1, help="pH 3.5 – 10.0")
         with col2:
-            st.markdown("#### ⛅ Climate & Weather Conditions")
-            val_temp = st.slider(
-                "Temperature (°C)",
-                min_value=8.0, max_value=45.0,
-                value=float(st.session_state.get("input_temperature", 24.0)),
-                step=0.5,
-                help="Average ambient temperature during the growing season (8°C to 45°C)"
-            )
-            val_hum = st.slider(
-                "Relative Humidity (%)",
-                min_value=14.0, max_value=100.0,
-                value=float(st.session_state.get("input_humidity", 80.0)),
-                step=0.5,
-                help="Average relative humidity percentage (14% to 100%)"
-            )
-            val_rain = st.slider(
-                "Rainfall (mm)",
-                min_value=20.0, max_value=350.0,
-                value=float(st.session_state.get("input_rainfall", 200.0)),
-                step=1.0,
-                help="Total expected seasonal rainfall in millimeters (20mm to 350mm)"
-            )
+            st.markdown("#### ⛅ Climate & Environment")
+            temp_val = st.number_input("Temperature (°C)", 8.0, 45.0, float(st.session_state.get("inp_temperature", 23.5)), 0.1)
+            hum_val  = st.number_input("Humidity (%)", 14.0, 100.0, float(st.session_state.get("inp_humidity", 82.0)), 0.1)
+            rain_val = st.number_input("Rainfall (mm)", 20.0, 350.0, float(st.session_state.get("inp_rainfall", 202.9)), 0.1)
 
-        submit_btn = st.form_submit_button("🔮 Predict Suitable Crop", use_container_width=True, type="primary")
+        submitted = st.form_submit_button("✨ Analyze Field", use_container_width=True)
 
-    # Handle Prediction Submission
-    if submit_btn:
+    # ── RESULT SECTION ──────────────────────────────────────────────────────
+    if submitted:
         if predictor is None:
-            st.error("Model engine is currently offline. Please check model files in `models/` directory.")
+            st.error("⚠️ Model not loaded. Please check the `models/` directory.")
         else:
-            input_dict = {
-                "N": val_n,
-                "P": val_p,
-                "K": val_k,
-                "temperature": val_temp,
-                "humidity": val_hum,
-                "ph": val_ph,
-                "rainfall": val_rain
-            }
-
-            with st.spinner("Analyzing agricultural soil and climate profile..."):
-                result = predictor.predict(input_dict)
+            with st.spinner("Analyzing field data..."):
+                result = predictor.predict({
+                    "N": n_val, "P": p_val, "K": k_val,
+                    "temperature": temp_val, "humidity": hum_val,
+                    "ph": ph_val, "rainfall": rain_val
+                })
 
             if not result.get("success"):
-                st.error(f"❌ Input Validation Error: {result.get('error')}")
+                st.error(f"❌ {result.get('error')}")
             else:
-                st.markdown("---")
-                
-                # Top Recommendation Card
-                rec_crop = result["crop_name"]
-                rec_icon = result.get("crop_icon", "🌱")
-                rec_conf = result.get("confidence", 0.0)
-                crop_info = result.get("crop_info", {})
+                crop_name = result.get("crop_name", "Unknown")
+                crop_icon = result.get("crop_icon", "🌱")
+                confidence = result.get("confidence", 0.0)
+                explanation = result.get("explanation", "")
+                model_used  = result.get("model_used", "Random Forest")
+                crop_info   = result.get("crop_info", {})
+                alts        = result.get("alternatives", [])
+                field_st    = result.get("field_status", [])
+                fert_guide  = result.get("fertilizer_guidance", [])
 
+                # Result header
                 st.markdown(f"""
-                <div class="recommend-badge">
-                    <div style="font-size: 3.5rem;">{rec_icon}</div>
-                    <div style="font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.9;">Best Match Recommendation</div>
-                    <div class="recommend-title">{rec_crop}</div>
-                    <div style="font-size: 1.15rem; font-weight: 500; opacity: 0.95;">
-                        Model Estimated Probability Score: <strong>{rec_conf}%</strong>
+                <div class="result-card">
+                  <div class="result-header">
+                    <span class="badge-ml">🤖 ML MODEL PREDICTION</span>
+                    <span class="badge-model">🧠 Model: {model_used}</span>
+                  </div>
+
+                  <!-- Crop Banner -->
+                  <div class="crop-banner">
+                    <div class="crop-icon-big">{crop_icon}</div>
+                    <div style="flex:1;">
+                      <span class="hero-label">Predicted Crop Class</span>
+                      <h2 class="crop-hero-name">{crop_name}</h2>
+                      <p class="crop-explanation">{explanation}</p>
                     </div>
-                    <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.4rem;">
-                        Category: {crop_info.get('category', 'Field Crop')} | Typical Season: {crop_info.get('season', 'General')}
+                    <div class="conf-box">
+                      <span class="conf-title">Model Score (Est. Probability)</span>
+                      <div class="conf-value">{confidence}%</div>
+                      <div class="conf-bar-wrap">
+                        <div class="conf-bar-fill" style="width:{confidence}%;"></div>
+                      </div>
+                      <span class="conf-disclaimer">ℹ️ Score represents model's estimated probability, not a guarantee of agricultural success.</span>
                     </div>
+                  </div>
+                """, unsafe_allow_html=True)
+
+                # Alternative chips
+                if alts:
+                    chips_html = '<div style="margin-bottom:20px;"><h4 style="font-family:\'Space Grotesk\',sans-serif;font-size:1rem;font-weight:700;margin-bottom:10px;">🏅 Other Candidate Crops:</h4><div>'
+                    for alt in alts:
+                        chips_html += f"""
+                        <span class="alt-chip">
+                          {alt.get('icon','🌱')} {alt.get('crop_name', alt.get('crop_key','').capitalize())}
+                          <span class="alt-conf">{alt.get('confidence',0)}% Score</span>
+                        </span>"""
+                    chips_html += "</div></div>"
+                    st.markdown(chips_html, unsafe_allow_html=True)
+
+                # Field input parameters table
+                if field_st:
+                    st.markdown("<h4 style=\"font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;margin:16px 0 10px;\">🎛️ Supplied Field Input Parameters & General Reference Ranges:</h4>", unsafe_allow_html=True)
+                    hcards = '<div class="health-grid">'
+                    for item in field_st:
+                        hcards += f"""
+                        <div class="health-card">
+                          <span class="h-feature">{item.get('feature', item.get('parameter',''))}</span>
+                          <span class="h-value">{item.get('value','')}</span>
+                          <div class="h-range">Ref: {item.get('ideal_range', item.get('typical_range',''))}</div>
+                        </div>"""
+                    hcards += "</div>"
+                    st.markdown(hcards, unsafe_allow_html=True)
+
+                # Fertilizer guidance
+                if fert_guide:
+                    st.markdown("<h4 style=\"font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;margin:20px 0 10px;\">🧪 General Fertilizer & Soil Nutrient Information:</h4>", unsafe_allow_html=True)
+                    for fert in fert_guide:
+                        if isinstance(fert, dict):
+                            st.markdown(f"""
+                            <div class="fert-item">
+                              <div class="fert-nutrient">🌿 <strong>{fert.get('nutrient','')}</strong> — <em>{fert.get('function','')}</em></div>
+                              <p class="fert-advice">{fert.get('advice','')}</p>
+                            </div>""", unsafe_allow_html=True)
+                        else:
+                            st.markdown(f'<div class="fert-item"><p class="fert-advice">• {fert}</p></div>', unsafe_allow_html=True)
+                    st.markdown('<div class="agri-disclaimer">⚠️ Consult a qualified agronomist or local agricultural extension service before applying chemical fertilizers.</div>', unsafe_allow_html=True)
+
+                # Agricultural Reference Card
+                st.markdown(f"""
+                  <div class="agri-card" style="margin-top:24px;">
+                    <div class="agri-header">
+                      <h3>📖 Crop Reference Information</h3>
+                      <span class="guidance-tag">General Agronomic Reference</span>
+                    </div>
+                    <div class="agri-grid">
+                      <div class="agri-item">
+                        <div class="agri-item-title">🪨 Soil Profile</div>
+                        <p>{crop_info.get('general_soil_description','—')}</p>
+                      </div>
+                      <div class="agri-item">
+                        <div class="agri-item-title">⚗️ Typical Soil pH Range</div>
+                        <p>{crop_info.get('typical_ph_range','—')}</p>
+                      </div>
+                      <div class="agri-item">
+                        <div class="agri-item-title">📅 Growing Season</div>
+                        <p>{crop_info.get('season','—')}</p>
+                      </div>
+                      <div class="agri-item">
+                        <div class="agri-item-title">📋 Management Advice</div>
+                        <p>{crop_info.get('general_management_guidance','—')}</p>
+                      </div>
+                    </div>
+                    <div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--gray-200);font-size:0.8rem;color:var(--gray-400);">
+                      ℹ️ <strong>Source / Reference:</strong> {crop_info.get('source','FAO & ICAR Extension Guidelines')}
+                    </div>
+                  </div>
                 </div>
                 """, unsafe_allow_html=True)
 
-                st.write("")
 
-                # Two-column detailed layout
-                res_col1, res_col2 = st.columns([3, 2])
-
-                with res_col1:
-                    st.markdown("### 🌾 Crop Agricultural Profile")
-                    st.write(f"**Optimal Soil Type:** {crop_info.get('general_soil_description', 'Fertile loamy soil')}")
-                    st.write(f"**Climate Requirements:** {crop_info.get('general_climate_description', 'Moderate climate')}")
-                    st.write(f"**Typical pH Range:** {crop_info.get('typical_ph_range', '6.0 - 7.5')}")
-                    st.write(f"**Typical Rainfall:** {crop_info.get('typical_rainfall_range', '100 - 200 mm')}")
-                    st.write(f"**Agronomic Guidance:** {crop_info.get('general_management_guidance', 'Standard practices')}")
-                    st.caption(f"📚 Source Citation: {crop_info.get('source', 'Agricultural Extension Literature')}")
-
-                    # Field status breakdown
-                    if result.get("field_status"):
-                        st.markdown("#### 🔍 Soil Nutrient & Environment Evaluation")
-                        status_df = pd.DataFrame(result["field_status"])
-                        if not status_df.empty:
-                            st.dataframe(
-                                status_df.rename(columns={
-                                    "parameter": "Parameter",
-                                    "value": "Your Input",
-                                    "typical_range": "Typical Benchmark Range",
-                                    "status": "Relative Status"
-                                }),
-                                use_container_width=True,
-                                hide_index=True
-                            )
-
-                    # Fertilizer & Soil Guidance
-                    if result.get("fertilizer_guidance"):
-                        st.markdown("#### 💡 Qualitative Soil Management Observations")
-                        for note in result["fertilizer_guidance"]:
-                            st.write(f"• {note}")
-
-                with res_col2:
-                    st.markdown("### 🥈 Alternative Candidates")
-                    alts = result.get("alternatives", [])
-                    if alts:
-                        for alt in alts:
-                            alt_name = alt.get("crop_name", alt.get("crop_key", "").capitalize())
-                            alt_icon = alt.get("icon", "🌱")
-                            alt_conf = alt.get("confidence", 0.0)
-                            st.markdown(f"**{alt_icon} {alt_name}** — `{alt_conf}%`")
-                            st.progress(min(1.0, max(0.0, alt_conf / 100.0)))
-                    else:
-                        st.info("The model found clear distinct separation with no close secondary alternative crops above 1% probability.")
-
-                    st.markdown("### ⚙️ Inference Details")
-                    st.markdown(f"""
-                    - **Model Architecture:** `{result.get('model_used', 'Random Forest Classifier')}`
-                    - **Feature Space:** 7-dimensional normalized agro-climatic vector
-                    - **Data Leakage Safeguard:** Standalone scaler fitted exclusively on training split
-                    """)
-
-                    st.markdown("""
-                    <div class="disclaimer-box">
-                        <strong>⚠️ Advisory Disclaimer:</strong><br>
-                        This system serves as an informational decision-support aid based on historical benchmark datasets. Soil biological activity, microclimates, pest pressures, and market dynamics must be reviewed with a certified agronomist or local government agricultural extension officer prior to commercial planting or applying chemical amendments.
-                    </div>
-                    """, unsafe_allow_html=True)
-
-
-# ==============================================================================
-# TAB 2: CROP EXPLORER & KNOWLEDGE BASE
-# ==============================================================================
+# ══════════════════════════════════════════════════════════════════════════════
+# TAB 2 — CROP EXPLORER
+# ══════════════════════════════════════════════════════════════════════════════
 with tab2:
-    st.markdown('<div class="main-header">📖 Crop Reference Knowledge Base</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-header">Comprehensive agricultural benchmarks for all 22 supported crop species.</div>', unsafe_allow_html=True)
+    st.markdown("""
+    <div id="explorer" style="text-align:center; margin-bottom:24px;">
+      <span class="section-sub">Interactive Reference Database</span>
+      <h2 class="section-title">Crop Explorer & Reference Search</h2>
+      <p class="section-desc">Search any crop to inspect its typical soil pH, climate ranges, and cultivation guidelines.</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-    db = load_crop_information_db()
-    all_crops = sorted(list(db.keys()))
+    search_q = st.text_input("🔍 Search crops by name or category (e.g. Rice, Fruit, Pulse, Legume)...", placeholder="Type to filter...")
 
-    search_query = st.text_input("🔍 Search crops by name or category (e.g., 'rice', 'fruit', 'legume', 'grain'):", "")
-
-    filtered_crops = [
-        c for c in all_crops
-        if search_query.lower() in c.lower()
-        or search_query.lower() in db[c].get("crop_name", "").lower()
-        or search_query.lower() in db[c].get("category", "").lower()
+    filtered = [
+        k for k in sorted(db.keys())
+        if search_q.lower() in k.lower()
+        or search_q.lower() in db[k].get("crop_name", "").lower()
+        or search_q.lower() in db[k].get("category", "").lower()
     ]
 
-    st.write(f"Showing **{len(filtered_crops)}** of **{len(all_crops)}** crops:")
+    st.caption(f"Showing **{len(filtered)}** of **{len(db)}** crops")
 
     cols = st.columns(3)
-    for idx, crop_key in enumerate(filtered_crops):
-        c_info = db[crop_key]
-        with cols[idx % 3]:
-            with st.container(border=True):
-                st.markdown(f"### {c_info.get('icon', '🌱')} {c_info.get('crop_name', crop_key.capitalize())}")
-                st.caption(f"**Category:** {c_info.get('category', 'Crop')} | **Season:** {c_info.get('season', 'General')}")
-                st.markdown(f"**Soil:** {c_info.get('general_soil_description', 'Agricultural Soil')}")
-                st.markdown(f"**Optimal pH:** `{c_info.get('typical_ph_range', '6.0 - 7.5')}`")
-                st.markdown(f"**Optimal Rain:** `{c_info.get('typical_rainfall_range', '100 - 200 mm')}`")
-                st.markdown(f"**Optimal Temp:** `{c_info.get('typical_temperature_range', '20 - 30°C')}`")
-                
-                with st.expander("Agronomic Management"):
-                    st.write(c_info.get("general_management_guidance", "Follow local extension guidance."))
-                    st.caption(f"Source: {c_info.get('source', 'Agricultural Extension Systems')}")
+    for i, key in enumerate(filtered):
+        info = db[key]
+        with cols[i % 3]:
+            st.markdown(f"""
+            <div class="crop-card">
+              <span class="crop-card-icon">{info.get('icon','🌱')}</span>
+              <div class="crop-card-name">{info.get('crop_name', key.capitalize())}</div>
+              <span class="crop-card-cat">{info.get('category','Crop')} · {info.get('season','General')}</span>
+              <p>🪨 {info.get('general_soil_description','Agricultural soil')}</p>
+              <p>⚗️ pH: <strong>{info.get('typical_ph_range','6.0 – 7.5')}</strong></p>
+              <p>🌧️ Rain: <strong>{info.get('typical_rainfall_range','100 – 200 mm')}</strong></p>
+              <p>🌡️ Temp: <strong>{info.get('typical_temperature_range','20 – 30°C')}</strong></p>
+              <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--gray-100);font-size:0.78rem;color:var(--gray-400);">
+                {info.get('source','Agricultural Extension')}
+              </div>
+            </div>
+            """, unsafe_allow_html=True)
 
 
-# ==============================================================================
-# TAB 3: MODEL BENCHMARKS & TRANSPARENCY
-# ==============================================================================
+# ══════════════════════════════════════════════════════════════════════════════
+# TAB 3 — ML PERFORMANCE
+# ══════════════════════════════════════════════════════════════════════════════
 with tab3:
-    st.markdown('<div class="main-header">📊 Model Benchmarks & Validation</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-header">Rigorous evaluation metrics, cross-validation scores, and data leakage audits.</div>', unsafe_allow_html=True)
-
-    m1, m2, m3, m4 = st.columns(4)
-    m1.metric("Selected Model", metadata.get("best_model_name", "Random Forest"))
-    m2.metric("Test Set Accuracy", f"{metadata.get('best_accuracy', 0.9955) * 100:.2f}%")
-    m3.metric("Weighted F1-Score", f"{metadata.get('best_f1_weighted', 0.9955) * 100:.2f}%")
-    m4.metric("5-Fold Cross-Val", "99.32% ± 0.58%")
-
-    st.markdown("---")
-    st.markdown("### 🧪 Multi-Model Performance Comparison (Test Split = 20%)")
-    
-    comp_data = metadata.get("model_comparison", [])
-    if comp_data:
-        comp_df = pd.DataFrame(comp_data)
-        comp_df["accuracy"] = comp_df["accuracy"].apply(lambda x: f"{x * 100:.2f}%")
-        comp_df["f1_weighted"] = comp_df["f1_weighted"].apply(lambda x: f"{x * 100:.2f}%")
-        comp_df["precision_weighted"] = comp_df["precision_weighted"].apply(lambda x: f"{x * 100:.2f}%")
-        comp_df["recall_weighted"] = comp_df["recall_weighted"].apply(lambda x: f"{x * 100:.2f}%")
-        comp_df.rename(columns={
-            "model_name": "Algorithm",
-            "accuracy": "Test Accuracy",
-            "f1_weighted": "Weighted F1",
-            "precision_weighted": "Weighted Precision",
-            "recall_weighted": "Weighted Recall"
-        }, inplace=True)
-        st.dataframe(comp_df, use_container_width=True, hide_index=True)
-
-    st.markdown("---")
-    st.markdown("### 🎯 Normalized Confusion Matrix (Test Set: 440 Observations)")
-    cm_path = os.path.join(PROJECT_ROOT, "static", "images", "confusion_matrix.png")
-    if not os.path.exists(cm_path):
-        cm_path = os.path.join(PROJECT_ROOT, "outputs", "confusion_matrix.png")
-    
-    if os.path.exists(cm_path):
-        st.image(cm_path, caption="Confusion Matrix on Held-Out Test Set (438 out of 440 predictions strictly correct)", use_container_width=True)
-    else:
-        st.info("Confusion matrix plot can be generated by running `python src/train_model.py`.")
-
-
-# ==============================================================================
-# TAB 4: ABOUT & SCIENTIFIC NOTES
-# ==============================================================================
-with tab4:
-    st.markdown('<div class="main-header">ℹ️ About CropWise AI</div>', unsafe_allow_html=True)
     st.markdown("""
-    ### 🔬 Scientific Methodology & Data Integrity
-    
-    1. **Data Leakage Safeguards:**
-       - All standard feature scaling transforms (`StandardScaler`) are strictly fitted on the 80% training partition (`X_train`) only.
-       - The 20% test partition (`X_test`) is exclusively evaluated as unseen hold-out data.
-    
-    2. **Probability Calibration Notice:**
-       - Class probability values are generated using tree-ensemble relative voting frequencies (`predict_proba()`).
-       - Since calibration techniques such as Isotonic Regression or Platt Scaling were not applied to this raw dataset, scores represent **Model Confidence Estimations**, not exact empirical real-world probabilities.
-    
-    3. **Dataset Unit Transparency:**
-       - Nitrogen (N), Phosphorus (P), and Potassium (K) values are labeled as **Dataset Feature Values / Indices**.
-       - They are not claimed to be exact lab `mg/kg` soil extractions, avoiding misleading precision.
-    
-    4. **Authoritative Sources Cited:**
-       - **FAO (Food and Agriculture Organization):** Crop ecological and moisture tolerance databases.
-       - **ICAR (Indian Council of Agricultural Research):** Crop management, soil pH, and seasonal calendars.
-       - **ICRISAT:** Semi-arid dryland legume and millet reference guidelines.
-       - **USDA Agricultural Research Service:** General agronomic thresholds and soil salinity guidelines.
-    """)
+    <div id="ml-performance" style="text-align:center; margin-bottom:24px;">
+      <span class="section-sub">Technical Transparency</span>
+      <h2 class="section-title">Machine Learning Model Performance & Dataset Specs</h2>
+      <p class="section-desc">Benchmark comparison across 5 candidate algorithms evaluated on a 20% stratified held-out test set (440 samples).</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-# Footer
-st.markdown("---")
-st.markdown(
-    "<div style='text-align: center; color: #7f8c8d; font-size: 0.85rem;'>"
-    "CropWise AI — Open Source Agronomic Intelligence System | Built with Streamlit & Scikit-Learn"
-    "</div>",
-    unsafe_allow_html=True
-)
+    # Dataset transparency card
+    st.markdown("""
+    <div class="cw-card" style="margin-bottom:28px;">
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:16px;">🗄️ Benchmark Dataset Transparency</h3>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+        <div class="metric-box"><span class="m-value">2,200</span><span class="m-label">Total Observations</span></div>
+        <div class="metric-box"><span class="m-value">22</span><span class="m-label">Crop Categories (100 each)</span></div>
+        <div class="metric-box"><span class="m-value">80 / 20</span><span class="m-label">Stratified Train / Test Split</span></div>
+        <div class="metric-box"><span class="m-value">Zero</span><span class="m-label">Data / Scaler Leakage</span></div>
+      </div>
+      <p style="font-size:0.85rem;color:var(--dark-600);margin-top:14px;">
+        ℹ️ <strong>Scope Note:</strong> Performance is measured on the available benchmark dataset (440 test samples, <code>random_state=42</code>)
+        and may differ on real-world field data.
+      </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col_left, col_right = st.columns(2)
+
+    with col_left:
+        st.markdown("""
+        <div class="cw-card">
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:6px;">
+            🏆 Best Model: <span style="color:var(--primary-600);">Random Forest Classifier</span>
+          </h3>
+          <p style="font-size:0.88rem;color:var(--dark-600);margin-bottom:16px;">
+            Evaluated using 80/20 stratified train-test split on 2,200 samples across 22 classes.
+          </p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+            <div class="metric-box"><span class="m-value">99.55%</span><span class="m-label">Test-Set Benchmark Accuracy</span></div>
+            <div class="metric-box"><span class="m-value">99.55%</span><span class="m-label">F1-Score (Weighted)</span></div>
+          </div>
+          <h4 style="font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:10px;">Candidate Algorithms:</h4>
+          <table class="model-table">
+            <thead><tr><th>Algorithm</th><th>Test Accuracy</th><th>F1-Score</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Random Forest (Selected)</strong></td><td><span class="badge-success">99.55%</span></td><td>99.55%</td></tr>
+              <tr><td>Support Vector Machine (SVM)</td><td>98.41%</td><td>98.40%</td></tr>
+              <tr><td>Decision Tree</td><td>97.95%</td><td>97.94%</td></tr>
+              <tr><td>K-Nearest Neighbors (KNN)</td><td>97.95%</td><td>97.93%</td></tr>
+              <tr><td>Logistic Regression</td><td>97.27%</td><td>97.25%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col_right:
+        st.markdown("""
+        <div class="cw-card">
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:6px;">
+            📊 Confusion Matrix Heatmap
+          </h3>
+          <p style="font-size:0.88rem;color:var(--dark-600);margin-bottom:12px;">
+            Evaluated on 440 test samples across 22 classes (20 test samples per class).
+          </p>
+        </div>
+        """, unsafe_allow_html=True)
+        cm_path = os.path.join(PROJECT_ROOT, "static", "images", "confusion_matrix.png")
+        if not os.path.exists(cm_path):
+            cm_path = os.path.join(PROJECT_ROOT, "outputs", "confusion_matrix.png")
+        if os.path.exists(cm_path):
+            st.image(cm_path, caption="438 out of 440 predictions correct on held-out test set", use_container_width=True)
+
+    # How it works steps
+    st.markdown("""
+    <div style="text-align:center;margin:40px 0 20px;">
+      <span class="section-sub">ML Pipeline</span>
+      <h2 class="section-title">How CropWise.AI Operates</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:40px;">
+      <div class="step-card">
+        <span class="step-num">01</span>
+        <div class="step-icon">📋</div>
+        <h3>Feature Input Vector</h3>
+        <p>Enter Nitrogen, Phosphorus, Potassium indices, Temperature, Humidity, Soil pH, and Rainfall values.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">02</span>
+        <div class="step-icon">⚙️</div>
+        <h3>Standardized ML Processing</h3>
+        <p>Data passes through StandardScaler (fitted ONLY on training data to prevent leakage) and is evaluated by Random Forest.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">03</span>
+        <div class="step-icon">🍎</div>
+        <h3>Prediction & Reference Output</h3>
+        <p>Receive crop classification, model score, candidate probabilities, input parameter summary, and reference agronomic information.</p>
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+# ── FOOTER ───────────────────────────────────────────────────────────────────
+st.markdown("""
+<div class="cw-footer">
+  <div class="cw-footer-brand">🌱 CropWise<span>.AI</span></div>
+  <p>AI-Powered Crop Recommendation & Agricultural Decision Support System.<br>
+  Model predictions are statistical recommendations based on benchmark dataset observations and do not replace certified agricultural extension advice or laboratory soil testing.</p>
+  <div class="tech-tags">
+    <span class="tag">Python 3</span>
+    <span class="tag">Streamlit</span>
+    <span class="tag">Scikit-Learn</span>
+    <span class="tag">Pandas</span>
+    <span class="tag">Joblib</span>
+    <span class="tag">Random Forest</span>
+  </div>
+  <p style="margin-top:20px;font-size:0.78rem;">© 2026 CropWise.AI. Built for Educational & Decision Support Purposes.</p>
+</div>
+""", unsafe_allow_html=True)
